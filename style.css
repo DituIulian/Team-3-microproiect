@@ -1,0 +1,743 @@
+/*  General */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: linear-gradient(to right, #1f005c, #5b0060);
+    color: #fff;
+}
+
+img {
+    max-width: 100%;
+    height: auto;
+}
+
+input[type="checkbox"],
+input[type="range"] {
+    accent-color: #a2ff86;
+}
+
+/* 🔝 Header */
+.main-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #1a003d;
+    padding: 1rem 2rem;
+    flex-wrap: wrap;
+    gap: 1rem;
+}
+
+.header-left,
+.header-center,
+.header-right {
+    display: flex;
+    align-items: center;
+}
+
+.header-left {
+    flex: 1;
+}
+
+.header-left .gt-logo {
+    height: 40px;
+}
+
+.header-center {
+    flex: 2;
+    justify-content: center;
+}
+
+.header-center input {
+    width: 100%;
+    max-width: 400px;
+    padding: 0.6rem 1rem;
+    border-radius: 25px;
+    border: none;
+    font-size: 1rem;
+    background-color: #320059;
+    color: #fff;
+}
+
+.header-center input::placeholder {
+    color: #aaa;
+}
+
+.header-right {
+    flex: 2;
+    justify-content: flex-end;
+    align-items: center;
+    gap: 1.2rem;
+    flex-wrap: wrap;
+}
+
+/* ===== USER RANK - HEADER ===== */
+
+.user-rank {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    gap: 6px;
+    font-size: 0.75rem;
+    color: #ccc;
+    min-width: 130px;
+}
+
+.rank-header {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+}
+
+.rank-label {
+    font-size: 0.8rem;
+    color: #fff;
+}
+
+/* Badge de rank */
+.badge-rank {
+    padding: 2px 10px;
+    border-radius: 20px;
+    font-size: 0.7rem;
+    font-weight: bold;
+    color: white;
+    text-transform: uppercase;
+    background-color: #c0c0c0;
+}
+
+.badge-rank.silver {
+    background: #c0c0c0;
+}
+
+.badge-rank.gold {
+    background: #ffd700;
+}
+
+.badge-rank.diamond {
+    background: #a2ff86;
+}
+
+.badge-rank.legend {
+    background: #a259ff;
+}
+
+/* Săptămâni */
+.rank-info {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    max-width: 130px;
+    gap: 20px;
+    font-size: 0.65rem;
+    color: #aaa;
+}
+
+.week-start,
+.week-end {
+    line-height: 1.1;
+}
+
+/* Bara de progres */
+.rank-progress {
+    width: 130px;
+    height: 5px;
+    background-color: #292929;
+    border-radius: 20px;
+    overflow: hidden;
+}
+
+.progress-bar {
+    height: 100%;
+    width: 50%;
+    /* Modifici procentul din HTML/JS */
+    background: linear-gradient(90deg, #ff66cc, #ff99cc);
+    transition: width 0.3s ease;
+}
+
+/* Badge generic (dacă e nevoie în alte secțiuni) */
+.badge {
+    background-color: #666;
+    padding: 0.2rem 0.5rem;
+    border-radius: 20px;
+    font-weight: bold;
+    font-size: 0.7rem;
+    color: white;
+}
+
+
+
+/* Pret */
+.price-cost {
+    font-weight: bold;
+    margin: 0.5rem 0;
+    color: #a2ff86;
+}
+
+.price-cost.not-enough {
+    color: #ff4d4f;
+}
+
+/* Bara de stoc */
+.stock-bar {
+    position: relative;
+    background-color: #444;
+    height: 8px;
+    border-radius: 4px;
+    margin: 0.5rem 0;
+}
+
+.stock-fill {
+    height: 100%;
+    background: linear-gradient(90deg, #a2ff86, #ff66cc);
+    border-radius: 4px 0 0 4px;
+    transition: width 0.4s ease;
+}
+
+.stock-text {
+    position: absolute;
+    top: -20px;
+    right: 0;
+    font-size: 0.75rem;
+    color: #ccc;
+}
+
+/* Card actions */
+.card-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: center;
+    margin-top: 0.5rem;
+}
+
+.card-actions button {
+    flex: 1;
+    padding: 0.5rem;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    font-size: 0.9rem;
+}
+
+.card-actions button:first-child {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+}
+
+.card-actions button:last-child {
+    background: #ff005c;
+    color: #fff;
+}
+
+.card-actions button:last-child:hover {
+    background: #ff3377;
+}
+
+.card-actions button:disabled {
+    background-color: #888;
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.out-of-stock-btn {
+    background-color: #555;
+    color: #ccc;
+    font-style: italic;
+    border: none;
+}
+
+
+/* Puncte */
+.user-points {
+    font-weight: bold;
+    font-size: 0.9rem;
+}
+
+/* Avatar */
+.user-avatar img {
+    width: 36px;
+    height: 36px;
+    border-radius: 50%;
+    border: 2px solid #fff;
+}
+
+
+/* Buton filtre (pentru mobil) */
+.filter-toggle-btn {
+    display: none;
+    background-color: #ff005c;
+    color: white;
+    border: none;
+    padding: 0.6rem 1rem;
+    margin: 1rem;
+    border-radius: 8px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+/*Layout principal */
+.shop-main {
+    display: flex;
+    padding: 2rem;
+    gap: 2rem;
+}
+
+.shop-sidebar {
+    width: 280px;
+    background-color: #1f004d;
+    padding: 1rem;
+    border-radius: 10px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
+    flex-shrink: 0;
+}
+
+/* Filtre */
+.filter-section {
+    margin-bottom: 1.5rem;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-radius: 10px;
+    padding: 1rem;
+}
+
+.filter-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    cursor: pointer;
+}
+
+.filter-header h3 {
+    margin: 0;
+    font-size: 1.1rem;
+}
+
+.arrow {
+    transition: transform 0.3s ease;
+}
+
+.filter-body {
+    margin-top: 0.8rem;
+}
+
+.filter-section.collapsed .filter-body {
+    display: none;
+}
+
+.filter-section.collapsed .arrow {
+    transform: rotate(-90deg);
+}
+
+
+/* Grilă produse */
+.rewards-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 1.5rem;
+}
+
+.reward-card {
+    position: relative;
+    background-color: #2b005a;
+    border-radius: 10px;
+    padding: 1rem;
+    text-align: center;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+}
+
+
+.reward-card button {
+    background-color: #ff005c;
+    border: none;
+    padding: 0.5rem 1rem;
+    color: white;
+    border-radius: 6px;
+    margin-top: 0.5rem;
+    cursor: pointer;
+}
+
+/* Modal */
+.modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.7);
+    display: none;
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    background-color: #2b005a;
+    padding: 2rem;
+    border-radius: 10px;
+    max-width: 500px;
+    width: 90%;
+    position: relative;
+}
+
+.modal-content img {
+    display: block;
+    max-width: 100%;
+    max-height: 180px;
+    margin: 0 auto 1rem;
+    object-fit: contain;
+    border-radius: 8px;
+    background-color: white;
+    padding: 10px;
+}
+
+.modal.hidden {
+    display: none;
+}
+
+
+.close-btn {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    font-size: 1.4rem;
+    color: #fff;
+    background: #ff005c;
+    border: none;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 10;
+}
+
+.close-btn:hover {
+    background: #ff3377;
+}
+.img-wrapper {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 10px;
+}
+
+.img-wrapper img {
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* Pret + rank*/
+.price-rank-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 1.2rem 0;
+}
+
+/* Badge rank */
+.badge-rank {
+    padding: 0.2rem 0.6rem;
+    border-radius: 12px;
+    color: #fff;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    font-weight: bold;
+}
+
+/* Culoare pret*/
+.price-cost {
+    font-weight: bold;
+    color: #a2ff86;
+    font-size: 1rem;
+}
+
+.price-cost.not-enough {
+    color: #ff4d4f;
+}
+
+/*Cos de cumparaturi */
+
+.cart-icon {
+    width: 28px;
+    height: 28px;
+    cursor: pointer;
+}
+.cart-panel {
+    display: none;
+    position: absolute;
+    top: 100px;
+    right: 2rem;
+    width: 280px;
+    background-color: #38006b;
+    padding: 1rem;
+    border: 2px solid #a2ff86;
+    border-radius: 10px;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
+    z-index: 100;
+}
+
+.cart-panel h2 {
+    color: #a2ff86;
+    margin-top: 0;
+}
+
+.cart-panel ul {
+    list-style: none;
+    padding: 0;
+}
+
+.cart-panel button {
+    background-color: #00b894;
+    border: none;
+    padding: 0.5rem;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+/* FOOTER */
+.main-footer {
+    background-color: #13002b;
+    padding: 3rem 2rem 2rem;
+    color: #ddd;
+    font-size: 0.9rem;
+    border-top: 1px solid #2b005a;
+}
+
+.footer-columns {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 2rem;
+    margin-bottom: 2rem;
+}
+
+.footer-column {
+    flex: 1 1 200px;
+    min-width: 200px;
+}
+
+.footer-column h4 {
+    color: #fff;
+    margin-bottom: 0.8rem;
+    font-size: 1rem;
+}
+
+.footer-column ul {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-column ul li {
+    margin-bottom: 0.5rem;
+    cursor: pointer;
+}
+
+.footer-column ul li:hover {
+    text-decoration: underline;
+}
+
+.footer-logo {
+    width: 140px;
+    margin-bottom: 1rem;
+}
+
+.footer-description {
+    margin-bottom: 1rem;
+    line-height: 1.5;
+}
+
+.footer-socials a {
+    display: inline-block;
+    margin-right: 10px;
+}
+
+.footer-socials img {
+    width: 28px;
+    height: 28px;
+    filter: brightness(0) invert(1);
+    transition: transform 0.2s;
+}
+
+.footer-socials img:hover {
+    transform: scale(1.1);
+}
+
+.footer-bottom {
+    border-top: 1px solid #333;
+    padding-top: 1.2rem;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    font-size: 0.8rem;
+    color: #aaa;
+}
+
+.footer-bottom .footer-rights {
+    display: flex;
+    gap: 1.5rem;
+}
+
+.close-btn-mobile {
+    display: none;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    background-color: #222;
+    border: 2px solid #555;
+    border-radius: 50%;
+    width: 32px;
+    height: 32px;
+    font-size: 1.2rem;
+    color: white;
+    cursor: pointer;
+    transition: background-color 0.2s ease;
+    z-index: 1000;
+}
+
+.close-btn-mobile:hover {
+    background-color: #444;
+}
+
+/* Responsive */
+
+@media screen and (max-width: 768px) {
+
+    .close-btn-mobile {
+            display: block;
+        }
+
+    .footer-columns {
+            flex-direction: column;
+        }
+    
+        .footer-bottom {
+            flex-direction: column;
+            align-items: center;
+            gap: 0.5rem;
+        }
+    
+        .footer-bottom .footer-rights {
+            flex-direction: column;
+            align-items: center;
+            gap: 0.3rem;
+        }
+
+    .shop-main {
+        flex-direction: column;
+    }
+
+    .filter-toggle-btn {
+        display: block;
+    }
+
+    .shop-sidebar {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 80%;
+        height: 100vh;
+        background-color: #1f004d;
+        z-index: 999;
+        overflow-y: auto;
+        transform: translateX(-100%);
+        transition: transform 0.3s ease;
+    }
+
+    .shop-sidebar.active {
+        display: block;
+        transform: translateX(0);
+    }
+
+    .header-right {
+        flex-direction: column;
+        align-items: flex-end;
+        gap: 0.5rem;
+    }
+
+    .main-header {
+        padding: 1rem;
+    }
+
+    .rewards-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+.badge-rank.legend {
+    background: #8a2be2;
+}
+
+/* Paginare */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.pagination button {
+    background-color: #320059;
+    color: #fff;
+    border: 1px solid #a2ff86;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.pagination button:hover {
+    background-color: #a2ff86;
+    color: #000;
+    transform: scale(1.05);
+}
+
+.pagination button.active {
+    background-color: #a2ff86;
+    color: #1a003d;
+}
+
+.category-tag {
+    display: inline-block;
+    background-color: #00b894;
+    color: #fff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    margin: 0.3rem 0;
+    
+}
+
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #1f004d;
+    padding: 5px 6px;
+    border-radius: 50%;
+    font-size: 1.2rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+    z-index: 2;
+}
+
+.favorite-btn:hover {
+    transform: scale(1.2);
+}
+
+.favorite-btn.active {
+    color: #ff005c;
+}

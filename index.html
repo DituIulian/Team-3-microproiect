@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<html lang="ro">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GT Shop</title>
+    <link rel="stylesheet" href="style.css" />
+    <script src="script.js" defer></script>
+</head>
+
+<body>
+    <!--  Header -->
+    <header class="main-header">
+        <div class="header-left">
+            <img src="assets/images/logo.png" alt="GT Logo" class="gt-logo" />
+        </div>
+
+        <div class="header-center">
+            <input type="text" id="search-input" placeholder="Caută premii..." />
+        </div>
+
+        <div class="header-right">
+            <div class="user-rank">
+                <div class="rank-header">
+                    <span class="rank-label">Rang deblocat</span>
+                    <span class="badge-rank legend">LEGEND</span>
+                </div>
+            
+                <div class="rank-info">
+                    <span class="week-start">Săpt. a 2-a</span>
+                    <span class="week-end">Săpt. a 4-aa</span>
+                </div>
+            
+                <div class="rank-progress">
+                    <div class="progress-bar" style="width: 100%;"></div>
+                </div>
+            </div>
+
+            <div class="user-points">9400 AP ⚡</div>
+
+            <div class="user-avatar">
+                <img src="assets/images/avatar-placeholder.png" alt="Avatar utilizator" />
+            </div>
+
+            <img src="assets/images/cart-icon.jpg" alt="Cart" class="cart-icon" id="toggle-cart" />
+        </div>
+    </header>
+
+    <!-- Buton filtrare (pentru mobil) -->
+    <button class="filter-toggle-btn" id="toggleFilters">🎛️ Filtre</button>
+
+    <!-- main -->
+    <main class="shop-main">
+        <!-- Sidebar de filtre -->
+        <aside class="shop-sidebar" id="filter-sidebar">
+            <button id="close-filters" class="close-btn-mobile">✖</button>
+            <div class="filter-section">
+                <div class="filter-header" onclick="toggleFilter(this)">
+                    <h3>Categorii</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="filter-body">
+                    <label><input type="checkbox" /> Merch GT</label><br />
+                    <label><input type="checkbox" /> Vouchere</label><br />
+                    <label><input type="checkbox" /> GT Rank Badges</label><br />
+                    <label><input type="checkbox" /> Avatars & Frames</label><br />
+                    <label><input type="checkbox" /> Mystery Box</label><br />
+                    <label><input type="checkbox" /> Experiențe</label><br />
+                    <label><input type="checkbox" /> Accesorii Tech & Gaming</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-header" onclick="toggleFilter(this)">
+                    <h3>Cost în puncte</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="filter-body">
+                    <input type="range" min="0" max="9999" step="100" value="0" />
+                    <p>0 AP – 9999 AP</p>
+                    <label><input type="checkbox" /> Low (0 – 500 AP)</label><br />
+                    <label><input type="checkbox" /> Medium (500 – 1000 AP)</label><br />
+                    <label><input type="checkbox" /> High (1000+ AP)</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-header" onclick="toggleFilter(this)">
+                    <h3>Rank</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="filter-body">
+                    <label><input type="checkbox" /> Silver</label><br />
+                    <label><input type="checkbox" /> Gold</label><br />
+                    <label><input type="checkbox" /> Diamond</label><br />
+                    <label><input type="checkbox" /> Legend</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-header" onclick="toggleFilter(this)">
+                    <h3>Disponibilitate</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="filter-body">
+                    <label><input type="checkbox" /> În stoc</label><br />
+                    <label><input type="checkbox" /> Noutăți</label><br />
+                    <label><input type="checkbox" /> Stoc epuizat</label>
+                </div>
+            </div>
+
+            <div class="filter-section">
+                <div class="filter-header" onclick="toggleFilter(this)">
+                    <h3>Tipul premiului</h3>
+                    <span class="arrow">▼</span>
+                </div>
+                <div class="filter-body">
+                    <label><input type="checkbox" /> Popular</label><br />
+                    <label><input type="checkbox" /> Rar</label><br />
+                    <label><input type="checkbox" /> Legendary</label>
+                </div>
+            </div>
+        </aside>
+
+        <!-- Produse -->
+        <section class="rewards-grid" id="rewards-container"></section>
+        
+    </main>
+
+    <div id="pagination" class="pagination"></div>
+
+    <!-- Cos de cumparaturi-->
+    <aside class="cart-panel" id="cart-panel">
+        <h2>Coșul meu</h2>
+        <ul id="cart-items"></ul>
+        <p>Total: <span id="cart-total">0</span> AP</p>
+        <button onclick="checkout()">Finalizează</button>
+    </aside>
+
+    <!-- Modal -->
+    <div id="product-modal" class="modal hidden">
+        <div class="modal-content">
+            <span class="close-btn" onclick="closeModal()">&times;</span>
+            <img id="modal-image" src="" alt="" />
+            <h3 id="modal-name"></h3>
+            <p id="modal-description"></p>
+            <p class="price">Preț: <span id="modal-price"></span> AP</p>
+            <p id="modal-stock"></p>
+            <button id="modal-buy-btn">Adaugă în coș</button>
+        </div>
+    </div>
+
+<footer class="main-footer">
+    <div class="footer-columns">
+        <!-- Logo + descriere -->
+        <div class="footer-column">
+            <img src="assets/images/logo.png" alt="Generatia Tech" class="footer-logo" />
+            <p class="footer-description">
+                Evoluează-ți parcursul cu recompense exclusive și deblochează realizări legendare în comunitatea noastră
+                de învățare.
+            </p>
+            <div class="footer-socials">
+                <!-- De introdus link-uri si imagini -->
+                <a href="#"><img src="assets/icons/facebook.png" alt="Facebook"></a>
+                <a href="#"><img src="assets/icons/instagram.png" alt="Instagram"></a>
+                <a href="#"><img src="assets/icons/tiktok.png" alt="TikTok"></a>
+            </div>
+        </div>
+
+        <!-- Categorii footer-->
+        <div class="footer-column">
+            <h4>Categorii</h4>
+            <ul>
+                <li>Merch GT</li>
+                <li>Vouchere</li>
+                <li>GT Rank Badges</li>
+                <li>Avatars & Frames</li>
+                <li>Mystery Box</li>
+                <li>Experiențe</li>
+                <li>Accesorii Tech & Gaming</li>
+            </ul>
+        </div>
+
+        <!-- Rank footer-->
+        <div class="footer-column">
+            <h4>Rank</h4>
+            <ul>
+                <li>Silver (Săpt. 2 – 4)</li>
+                <li>Gold (Săpt. 5 – 7)</li>
+                <li>Diamond (Săpt. 8 – 10)</li>
+                <li>Legend (Săpt. 11 – 13)</li>
+            </ul>
+        </div>
+
+        <!-- Suport footer-->
+        <div class="footer-column">
+            <h4>Support</h4>
+            <ul>
+                <li>Centru de Ajutor</li>
+                <li>Termeni și Condiții</li>
+                <li>Politica de Confidențialitate</li>
+                <li>Politica de Cookies</li>
+                <li>Contactează-ne</li>
+            </ul>
+        </div>
+    </div>
+
+    <div class="footer-bottom">
+        <p>&copy; 2025 GT Shop. All rights reserved.</p>
+        <div class="footer-rights">
+            <span>🌟 Powered by Spring 2025 Team 3</span>
+            <span>🌀 Level up daily</span>
+        </div>
+    </div>
+</footer>
+
+
+  
+</body>
+
+</html>
