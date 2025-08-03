@@ -14,7 +14,7 @@ const mockRewards = [
     maxStock: 10,
     rank: "Silver",
     category: "Accesorii Tech & Gaming",
-    type: "Popular"
+    type: "legendary"
   },
   {
     id: "r2",
@@ -40,9 +40,9 @@ const mockRewards = [
     inStock: true,
     stockCount: 6,
     maxStock: 10,
-    rank: "Diamond",
+    rank: "Legend",
     category: "Accesorii Tech & Gaming",
-    type: "Legendary"
+    type: "legendary"
   },
   {
     id: "r4",
@@ -294,7 +294,7 @@ const mockUser = {
 
 let availablePoints = mockUser.activityPoints; 
 
-const currentWeek = 5; // Poate vine dintr-o variabila globala, API, etc
+const currentWeek = 3; // Poate vine dintr-o variabila globala, API, etc
 const rankInfo = getUserRankByWeek(currentWeek);
 const progress = getWeekProgress(currentWeek, rankInfo.weekStart, rankInfo.weekEnd);
 
@@ -335,6 +335,8 @@ function displayRewards(rewards) {
   const start = (currentPage - 1) * itemsPerPage;
   const paginatedRewards = rewards.slice(start, start + itemsPerPage);
 
+
+  // Carduri
   paginatedRewards.forEach(reward => {
     const card = document.createElement("div");
     card.className = "reward-card";
@@ -379,6 +381,7 @@ function displayRewards(rewards) {
   renderPagination(rewards.length);
 }
 
+// Paginare
 function renderPagination(totalItems) {
   const pages = Math.ceil(totalItems / itemsPerPage);
   const paginationContainer = document.getElementById("pagination");
@@ -421,36 +424,145 @@ function openModal(rewardId) {
 });
 }
 
+// Sidebar filtrare
+
+const priceSliderElement = document.getElementById('price-slider');
+const priceSliderDisplay = document.getElementById('price-slider-display');
+const intervalCheckbox = document.getElementById("use-price-interval");
+const priceRangeCheckboxes = document.querySelectorAll(".price-range-checkbox");
+
+
+const allPrices = mockRewards.map(p => p.price);
+const minPrice = Math.min(...allPrices);
+const maxPrice = Math.max(...allPrices);
+
+
+noUiSlider.create(priceSliderElement, {
+  start: [minPrice, maxPrice],
+  connect: true,
+  step: 10,
+  range: {
+    min: minPrice,
+    max: maxPrice
+  },
+  tooltips: false,
+  format: {
+    to: value => Math.round(value),
+    from: value => parseFloat(value)
+  }
+});
+
+
+priceSliderElement.noUiSlider.on('update', (values) => {
+  const [min, max] = values;
+  priceSliderDisplay.textContent = `${min} AP – ${max} AP`;
+
+  if (intervalCheckbox.checked) {
+    applyFilters();
+  }
+});
+
+
+function handleExclusivePriceCheckboxes(changed) {
+  if (changed === "interval") {
+    priceRangeCheckboxes.forEach(cb => cb.checked = false);
+  } else {
+    intervalCheckbox.checked = false;
+    applyFilters(); 
+  }
+}
+
+intervalCheckbox.addEventListener("change", () => {
+  handleExclusivePriceCheckboxes("interval");
+  applyFilters();
+});
+
+priceRangeCheckboxes.forEach(cb => {
+  cb.addEventListener("change", () => {
+    handleExclusivePriceCheckboxes("range");
+  });
+});
+
+// eFiltrare
 function applyFilters() {
   const checkboxes = document.querySelectorAll("input[type=checkbox]");
-  const activeFilters = { category: [], rank: [], type: [], stock: [] };
+  const useSlider = intervalCheckbox.checked;
 
+  const lowChecked = document.querySelector('input[value="low"]')?.checked;
+  const mediumChecked = document.querySelector('input[value="medium"]')?.checked;
+  const highChecked = document.querySelector('input[value="high"]')?.checked;
+
+  const activeFilters = {
+    category: [],
+    rank: [],
+    type: [],
+    stock: [],
+  };
+
+  // 
   checkboxes.forEach(cb => {
     if (cb.checked) {
       const label = cb.parentElement.textContent.trim().toLowerCase();
-      if (label.includes("merch") || label.includes("vouchere") || label.includes("tech") || label.includes("avatar")) {
+
+      if (
+        label.includes("merch") || label.includes("vouchere") ||
+        label.includes("tech") || label.includes("avatar") ||
+        label.includes("mystery") || label.includes("experiențe") || label.includes("badges")
+      ) {
         activeFilters.category.push(cb.parentElement.textContent.trim());
-      } else if (label.includes("silver") || label.includes("gold") || label.includes("diamond")) {
+      } else if (
+        label.includes("silver") || label.includes("gold") ||
+        label.includes("diamond") || label.includes("legend")
+      ) {
         activeFilters.rank.push(cb.parentElement.textContent.trim());
-      } else if (label.includes("popular") || label.includes("rar") || label.includes("legendary")) {
+      } else if (
+        label.includes("popular") || label.includes("rar") || label.includes("legendary")
+      ) {
         activeFilters.type.push(cb.parentElement.textContent.trim());
-      } else if (label.includes("stoc")) {
-        activeFilters.stock.push(label);
-      }
+      } else if (
+      label.includes("în stoc") || label.includes("noutăți") || label.includes("stoc epuizat")
+    ) {
+      activeFilters.stock.push(label); 
+    }
+
     }
   });
 
-  const sliderValue = document.querySelector("input[type=range]").value;
 
-  const filtered = mockRewards.filter(item => {
-    const priceOK = item.price >= sliderValue;
-    const catOK = !activeFilters.category.length || activeFilters.category.includes(item.category);
-    const rankOK = !activeFilters.rank.length || activeFilters.rank.includes(item.rank);
-    const typeOK = !activeFilters.type.length || activeFilters.type.includes(item.type);
-    const stockOK = !activeFilters.stock.length || (item.inStock && activeFilters.stock.includes("în stoc"));
-    return priceOK && catOK && rankOK && typeOK && stockOK;
-  });
+ const filtered = mockRewards.filter(item => {
+  // === Preț ===
+  let priceOK = true;
+  if (useSlider && priceSliderElement.noUiSlider) {
+    const [min, max] = priceSliderElement.noUiSlider.get();
+    priceOK = item.price >= parseInt(min) && item.price <= parseInt(max);
+  } else if (lowChecked) {
+    priceOK = item.price >= 0 && item.price <= 500;
+  } else if (mediumChecked) {
+    priceOK = item.price > 500 && item.price <= 1000;
+  } else if (highChecked) {
+    priceOK = item.price > 1000;
+  }
 
+  // === Stoc ===
+  let stockOK = true;
+  if (activeFilters.stock.length) {
+    stockOK = activeFilters.stock.some(condition => {
+      if (condition === "în stoc") return item.stockCount > 0;
+      if (condition === "stoc epuizat") return item.stockCount === 0;
+      if (condition === "noutăți") return item.stockCount >= 1 && item.stockCount <= 3; // de redefinit
+      return true;
+    });
+  }
+
+  const catOK = !activeFilters.category.length || activeFilters.category.includes(item.category);
+  const rankOK = !activeFilters.rank.length || activeFilters.rank.includes(item.rank);
+   const typeOK = !activeFilters.type.length || activeFilters.type.includes(item.type);
+   
+
+  return priceOK && stockOK && catOK && rankOK && typeOK;
+});
+
+  // === Afișează produsele filtrate ===
   displayRewards(filtered);
 }
 
