@@ -42,7 +42,7 @@ const mockRewards = [
     maxStock: 10,
     rank: "Legend",
     category: "Accesorii Tech & Gaming",
-    type: "legendary"
+    type: "Legendary"
   },
   {
     id: "r4",
@@ -294,7 +294,7 @@ const mockUser = {
 
 let availablePoints = mockUser.activityPoints; 
 
-const currentWeek = 3; // Poate vine dintr-o variabila globala, API, etc
+const currentWeek = 5; // Poate vine dintr-o variabila globala, API, etc
 const rankInfo = getUserRankByWeek(currentWeek);
 const progress = getWeekProgress(currentWeek, rankInfo.weekStart, rankInfo.weekEnd);
 
@@ -336,47 +336,64 @@ function displayRewards(rewards) {
   const paginatedRewards = rewards.slice(start, start + itemsPerPage);
 
 
-  // Carduri
-  paginatedRewards.forEach(reward => {
-    const card = document.createElement("div");
-    card.className = "reward-card";
-    card.innerHTML = `
-      <span class="favorite-btn ${favorites.includes(reward.id) ? 'active' : ''}" onclick="toggleFavorite('${reward.id}')">🤍</span>
 
-      <div class="img-wrapper">
-        <img src="${reward.image}" alt="${reward.name}">
-      </div>
+ // Carduri
+paginatedRewards.forEach(reward => {
+  const card = document.createElement("div");
+  card.className = "reward-card";
 
-      <h3>${reward.name}</h3>
-      <p class="short-desc">${reward.description}</p>
-      <p class="category-tag">${reward.category}</p>
+  // === Rank access logic ===
+  const userRankOrder = ["Unranked", "Silver", "Gold", "Diamond", "Legend"];
+  const userRankIndex = userRankOrder.indexOf(rankInfo.rank);
+  const rewardRankIndex = userRankOrder.indexOf(reward.rank);
+  const hasAccess = userRankIndex >= rewardRankIndex;
 
-      <div class="price-rank-row">
-        <div class="price-cost ${userPoints < reward.price ? 'not-enough' : ''}">${reward.price} AP ⚡</div>
-        <span class="badge-rank ${reward.rank.toLowerCase()}">${reward.rank}</span>
-      </div>
-
-      <div class="stock-bar">
-        <div class="stock-fill" style="width:${(reward.inStock ? (reward.stockCount/reward.maxStock)*100 : 0)}%"></div>
-        <span class="stock-text">${reward.inStock ? reward.stockCount + '/' + reward.maxStock : 'Stoc epuizat'}</span>
-      </div>
-
-      <div class="card-actions">
-        <button onclick="openModal('${reward.id}')">Vezi detalii</button>
-        <button 
+  // === Butoane în funcție de condiții ===
+  let actionHTML = '';
+  if (!reward.inStock) {
+    actionHTML = `<button class="out-of-stock-btn" disabled>Stoc epuizat</button>`;
+  } else if (!hasAccess) {
+    actionHTML = `<button class="out-of-stock-btn" disabled title="Deblochează rank ${reward.rank}">🔒 Indisponibil</button>`;
+  } else {
+    actionHTML = `
+      <button onclick="openModal('${reward.id}')">Vezi detalii</button>
+      <button 
         onclick="handleBuy('${reward.id}')"
-        ${
-  reward.inStock
-    ? `<button onclick="handleBuy('${reward.id}')" ${userPoints < reward.price ? 'disabled title="AP insuficient"' : ''}>Cumpără cu AP</button>`
-    : `<button class="out-of-stock-btn" disabled>Stoc epuizat</button>`
-}
-      </button>
-
-      </div>
-
+        ${availablePoints < reward.price ? 'disabled title="AP insuficient"' : ''}
+      >Cumpără cu AP</button>
     `;
-    container.appendChild(card);
-  });
+  }
+
+  // === Card final ===
+  card.innerHTML = `
+    <span class="favorite-btn ${favorites.includes(reward.id) ? 'active' : ''}" onclick="toggleFavorite('${reward.id}')">🤍</span>
+
+    <div class="img-wrapper">
+      <img src="${reward.image}" alt="${reward.name}">
+    </div>
+
+    <h3>${reward.name}</h3>
+    <p class="short-desc">${reward.description}</p>
+    <p class="category-tag">${reward.category}</p>
+
+    <div class="price-rank-row">
+      <div class="price-cost ${availablePoints < reward.price ? 'not-enough' : ''}">${reward.price} AP ⚡</div>
+      <span class="badge-rank ${reward.rank.toLowerCase()}">${reward.rank}</span>
+    </div>
+
+    <div class="stock-bar">
+      <div class="stock-fill" style="width:${(reward.inStock ? (reward.stockCount / reward.maxStock) * 100 : 0)}%"></div>
+      <span class="stock-text">${reward.inStock ? reward.stockCount + '/' + reward.maxStock : 'Stoc epuizat'}</span>
+    </div>
+
+    <div class="card-actions">
+      ${actionHTML}
+    </div>
+  `;
+
+  container.appendChild(card);
+});
+
 
   renderPagination(rewards.length);
 }
@@ -499,10 +516,11 @@ function applyFilters() {
     stock: [],
   };
 
-  // 
+  
   checkboxes.forEach(cb => {
     if (cb.checked) {
       const label = cb.parentElement.textContent.trim().toLowerCase();
+      const cleanLabel = label.trim().toLowerCase();
 
       if (
         label.includes("merch") || label.includes("vouchere") ||
@@ -512,11 +530,11 @@ function applyFilters() {
         activeFilters.category.push(cb.parentElement.textContent.trim());
       } else if (
         label.includes("silver") || label.includes("gold") ||
-        label.includes("diamond") || label.includes("legend")
+        label.includes("diamond") || cleanLabel === "legend"
       ) {
         activeFilters.rank.push(cb.parentElement.textContent.trim());
       } else if (
-        label.includes("popular") || label.includes("rar") || label.includes("legendary")
+        label.includes("popular") || label.includes("rar") || cleanLabel === "legendary"
       ) {
         activeFilters.type.push(cb.parentElement.textContent.trim());
       } else if (
@@ -530,20 +548,26 @@ function applyFilters() {
 
 
  const filtered = mockRewards.filter(item => {
-  // === Preț ===
-  let priceOK = true;
-  if (useSlider && priceSliderElement.noUiSlider) {
-    const [min, max] = priceSliderElement.noUiSlider.get();
-    priceOK = item.price >= parseInt(min) && item.price <= parseInt(max);
-  } else if (lowChecked) {
-    priceOK = item.price >= 0 && item.price <= 500;
-  } else if (mediumChecked) {
-    priceOK = item.price > 500 && item.price <= 1000;
-  } else if (highChecked) {
-    priceOK = item.price > 1000;
-  }
+ 
+ let priceOK = true;
 
-  // === Stoc ===
+if (useSlider && priceSliderElement.noUiSlider) {
+  const [min, max] = priceSliderElement.noUiSlider.get();
+  priceOK = item.price >= parseInt(min) && item.price <= parseInt(max);
+} else {
+  const priceRanges = [];
+
+  if (lowChecked) priceRanges.push([0, 500]);
+  if (mediumChecked) priceRanges.push([501, 1000]);
+  if (highChecked) priceRanges.push([1001, Infinity]);
+
+  if (priceRanges.length > 0) {
+    priceOK = priceRanges.some(([min, max]) => item.price >= min && item.price <= max);
+  }
+}
+
+
+
   let stockOK = true;
   if (activeFilters.stock.length) {
     stockOK = activeFilters.stock.some(condition => {
@@ -562,7 +586,7 @@ function applyFilters() {
   return priceOK && stockOK && catOK && rankOK && typeOK;
 });
 
-  // === Afișează produsele filtrate ===
+ 
   displayRewards(filtered);
 }
 
@@ -580,7 +604,6 @@ function handleBuy(rewardId) {
   const existing = cart.find(i => i.id === r.id);
   const itemTotal = r.price;
 
-  // verifică dacă ai destule puncte
   if (itemTotal > availablePoints) {
     alert("Puncte insuficiente pentru acest produs!");
     return;
@@ -592,10 +615,12 @@ function handleBuy(rewardId) {
     cart.push({ id: r.id, name: r.name, price: r.price, quantity: 1 });
   }
 
-  availablePoints -= itemTotal; // ✅ scade punctele
+  availablePoints -= itemTotal;
   updateCartUI();
-  updateUserPointsDisplay(); // ✅ actualizează pe ecran
+  updateUserPointsDisplay();
+  applyFilters(); // <--- AICI se face magia
 }
+
 
 
 function updateCartUI() {
@@ -620,7 +645,7 @@ function checkout() {
   alert(`Comandă finalizată! Ai cheltuit ${total} AP.`);
   cart.length = 0;
   updateCartUI();
-  updateUserPointsDisplay(); // ✅ în caz că vrei să continui cumpărături
+  updateUserPointsDisplay(); 
 }
 
 
