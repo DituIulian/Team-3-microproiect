@@ -4,8 +4,8 @@ const userPoints = 9000;
 const mockRewards = [
   {
     id: "r1",
-    name: "Tastatură RGB Mech-X",
-    description: "Taste mecanice rapide și durabile",
+    name: "Tastatură RGB Mech-X Tastatură RGB Mech-X Tastatură RGB Mech-X",
+    description: " Taste mecanice rapide și durabileTaste mecanice rapide și durabileTaste mecanice rapide și durabileTaste mecanice rapide și durabile",
     fullDescription: "Tastatură RGB Mech-X cu iluminare personalizabilă și switch-uri performante.",
     price: 1200,
     image: "assets/images/keyboard.jpg",
@@ -289,12 +289,12 @@ const mockUser = {
   id: "u123",
   name: "Iulian",
   avatar: "assets/images/avatar-placeholder.png",
-  activityPoints: 1111
+  activityPoints: 11211
 };
 
 let availablePoints = mockUser.activityPoints; 
 
-const currentWeek = 7; // Poate vine dintr-o variabilă globală, API, etc
+const currentWeek = 5; // Poate vine dintr-o variabila globala, API, etc
 const rankInfo = getUserRankByWeek(currentWeek);
 const progress = getWeekProgress(currentWeek, rankInfo.weekStart, rankInfo.weekEnd);
 
@@ -305,8 +305,8 @@ function getUserRankByWeek(currentWeek) {
     return { rank: "Gold", weekStart: 5, weekEnd: 7 };
   } else if (currentWeek >= 8 && currentWeek <= 10) {
     return { rank: "Diamond", weekStart: 8, weekEnd: 10 };
-  } else if (currentWeek >= 11 && currentWeek <= 13) {
-    return { rank: "Legend", weekStart: 11, weekEnd: 13 };
+  } else if (currentWeek >= 11 && currentWeek <= 24) {
+    return { rank: "Legend", weekStart: 11, weekEnd: 24 }; //De decis numarul max de sapt pana la reset
   } else {
     return { rank: "Unranked", weekStart: null, weekEnd: null };
   }

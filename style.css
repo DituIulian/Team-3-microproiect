@@ -1,9 +1,13 @@
 /*  General */
 body {
     margin: 0;
-    font-family: Arial, sans-serif;
-    background: linear-gradient(to right, #1f005c, #5b0060);
-    color: #fff;
+    font-family: 'Karla', sans-serif;
+    background: radial-gradient(circle at top left, rgba(138, 43, 226, 0.2), transparent 50%),
+            radial-gradient(circle at bottom right, rgba(255, 20, 147, 0.2), transparent 60%),
+            linear-gradient(180deg, #160034, #0b001e);
+        background-attachment: fixed;
+        background-size: cover;
+        color: white;
 }
 
 img {
@@ -21,7 +25,7 @@ input[type="range"] {
     display: flex;
     align-items: center;
     justify-content: space-between;
-    background-color: #1a003d;
+    background: linear-gradient(270.4deg, rgba(106, 50, 170, 0.264) 2.53%, rgba(38, 0, 91, 0.8) 100%);
     padding: 1rem 2rem;
     flex-wrap: wrap;
     gap: 1rem;
@@ -73,100 +77,94 @@ input[type="range"] {
 /* ===== USER RANK - HEADER ===== */
 
 .user-rank {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
     text-align: center;
-    gap: 6px;
-    font-size: 0.75rem;
-    color: #ccc;
-    min-width: 130px;
+    padding: 0rem 1rem ;
 }
 
 .rank-header {
-    display: flex;
+    display: inline-flex;
     align-items: center;
-    gap: 6px;
+    gap: 1.5rem;
+    justify-content: center;
+    flex-wrap: nowrap;
 }
 
 .rank-label {
-    font-size: 0.8rem;
-    color: #fff;
+    font-size: 0.85rem;
+    color: #ffffff;
+    white-space: nowrap;
 }
 
-/* Badge de rank */
 .badge-rank {
-    padding: 2px 10px;
+    display: inline-block;
+    padding: 4px 12px;
     border-radius: 20px;
-    font-size: 0.7rem;
-    font-weight: bold;
     color: white;
     text-transform: uppercase;
-    background-color: #c0c0c0;
-}
-
-.badge-rank.silver {
-    background: #c0c0c0;
+    text-align: center;
+    min-width: 3rem;
+    max-width: 4rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .badge-rank.gold {
-    background: #ffd700;
+    background: linear-gradient(135deg, #f0b400, #a97600);
+}
+
+.badge-rank.silver {
+    background: linear-gradient(135deg, #c0c0c0, #999999);
 }
 
 .badge-rank.diamond {
-    background: #a2ff86;
+    background: linear-gradient(135deg, #a2ff86, #63c472);
 }
 
 .badge-rank.legend {
-    background: #a259ff;
+    background: linear-gradient(135deg, #9f5cff, #6f1aff);
 }
 
-/* Săptămâni */
+.badge-rank.unranked {
+    background-color: #aaa;
+}
+
 .rank-info {
     display: flex;
     justify-content: space-between;
-    width: 100%;
-    max-width: 130px;
-    gap: 20px;
-    font-size: 0.65rem;
+    padding: 0.2rem 0;
+    font-size: 0.75rem;
     color: #aaa;
 }
 
-.week-start,
-.week-end {
-    line-height: 1.1;
-}
-
-/* Bara de progres */
 .rank-progress {
-    width: 130px;
-    height: 5px;
-    background-color: #292929;
-    border-radius: 20px;
+    width: 100%;
+    height: 6px;
+    background-color: #333;
+    border-radius: 4px;
     overflow: hidden;
 }
 
 .progress-bar {
     height: 100%;
+    background-color: #ff66cc;
+}
+
+.week-start,
+.week-end {
+    display: inline-block;
+    line-height: 1.1;
+    font-size: 0.75rem;
+    color: #aaa;
+}
+
+.progress-bar {
+    height: 100%;
     width: 50%;
-    /* Modifici procentul din HTML/JS */
     background: linear-gradient(90deg, #ff66cc, #ff99cc);
     transition: width 0.3s ease;
 }
 
-/* Badge generic (dacă e nevoie în alte secțiuni) */
-.badge {
-    background-color: #666;
-    padding: 0.2rem 0.5rem;
-    border-radius: 20px;
-    font-weight: bold;
-    font-size: 0.7rem;
-    color: white;
-}
-
-
-
-/* Pret */
 .price-cost {
     font-weight: bold;
     margin: 0.5rem 0;
@@ -202,11 +200,12 @@ input[type="range"] {
 }
 
 /* Card actions */
+/* Card actions */
 .card-actions {
     display: flex;
     gap: 0.5rem;
-    justify-content: center;
-    margin-top: 0.5rem;
+    justify-content: space-between;
+    margin-top: auto;
 }
 
 .card-actions button {
@@ -214,22 +213,34 @@ input[type="range"] {
     padding: 0.5rem;
     border-radius: 6px;
     border: none;
-    cursor: pointer;
     font-size: 0.9rem;
+    cursor: pointer;
+    text-align: center;
+    line-height: 1.2;
+    min-height: 44px;
+    white-space: normal;
+   
 }
 
 .card-actions button:first-child {
     background: transparent;
     color: #fff;
     border: 1px solid #fff;
+    transition: background 0.2s, color 0.2s;
+}
+
+.card-actions button:first-child:hover {
+    background-color: #fff;
+    color: #1a002f;
 }
 
 .card-actions button:last-child {
     background: #ff005c;
     color: #fff;
+    transition: background 0.2s;
 }
 
-.card-actions button:last-child:hover {
+.card-actions button:last-child:hover:not(:disabled) {
     background: #ff3377;
 }
 
@@ -245,6 +256,10 @@ input[type="range"] {
     color: #ccc;
     font-style: italic;
     border: none;
+    min-height: 44px;
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;
 }
 
 
@@ -290,6 +305,7 @@ input[type="range"] {
     border-radius: 10px;
     box-shadow: 0 0 15px rgba(0, 0, 0, 0.3);
     flex-shrink: 0;
+    font-family: 'Spartan';
 }
 
 /* Filtre */
@@ -338,23 +354,121 @@ input[type="range"] {
 }
 
 .reward-card {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
     position: relative;
-    background-color: #2b005a;
+    background: linear-gradient(360deg, rgba(173, 168, 255, 0.5) -2.75%, rgba(90, 19, 255, 0.5) 100%);
     border-radius: 10px;
     padding: 1rem;
     text-align: center;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
+    border: 2px solid;
+    border-image-source: linear-gradient(316.15deg, rgba(205, 171, 254, 0.37) 23.54%, rgba(81, 3, 195, 0.48) 76.26%);
+    backdrop-filter: blur(14px);
+    box-shadow: 0px 10px 30px 0px #0000000A;
+height: auto;
+    max-height: unset;
+    align-self: flex-start;
 }
 
+.img-wrapper {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff;
+    border-radius: 8px;
+    margin-bottom: 1rem;
+    padding: 10px;
+}
 
-.reward-card button {
-    background-color: #ff005c;
-    border: none;
-    padding: 0.5rem 1rem;
-    color: white;
+.img-wrapper img {
+    max-height: 100%;
+    object-fit: contain;
+}
+
+.reward-card h3 {
+    font-size: 1.2rem;
+    font-weight: bold;
+    line-height: 1.4;
+    margin-top: 0.8rem;
+    height: 2.8em;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.short-desc {
+    font-size: 0.95rem;
+    line-height: 1.4;
+    color: #ccc;
+    height: 2.8em;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+}
+
+.card-actions {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: space-between;
+    margin-top: auto;
+}
+
+.card-actions button {
+    flex: 1;
+    padding: 0.5rem;
     border-radius: 6px;
-    margin-top: 0.5rem;
+    border: none;
+    font-size: 0.9rem;
     cursor: pointer;
+    text-align: center;
+    line-height: 1.2;
+    min-height: 44px;
+    white-space: normal;
+}
+
+.card-actions button:first-child {
+    background: transparent;
+    color: #fff;
+    border: 1px solid #fff;
+    transition: background 0.2s, color 0.2s;
+}
+
+.card-actions button:first-child:hover {
+    background-color: #fff;
+    color: #1a002f;
+}
+
+.card-actions button:last-child {
+    background: #ff005c;
+    color: #fff;
+    transition: background 0.2s;
+}
+
+.card-actions button:last-child:hover:not(:disabled) {
+    background: #ff3377;
+}
+
+.card-actions button:disabled {
+    background-color: #888;
+    color: #ccc;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+.out-of-stock-btn {
+    background-color: #555;
+    color: #ccc;
+    font-style: italic;
+    border: none;
+    min-height: 44px;
+    text-align: center;
+    line-height: 1.2;
+    white-space: normal;
 }
 
 /* Modal */
@@ -395,6 +509,10 @@ input[type="range"] {
     display: none;
 }
 
+#product-modal h3,
+#modal-price {
+    font-family: 'Spartan';
+}
 
 .close-btn {
     position: absolute;
@@ -465,9 +583,13 @@ input[type="range"] {
 /*Cos de cumparaturi */
 
 .cart-icon {
-    width: 28px;
-    height: 28px;
+    width: 1.5rem;
+    height: 1.5rem;
     cursor: pointer;
+    background: var(--Primary-300, #8174FF);
+    border-radius: 100%;  
+    padding: 0.4rem;
+
 }
 .cart-panel {
     display: none;
@@ -506,7 +628,8 @@ input[type="range"] {
 
 /* FOOTER */
 .main-footer {
-    background-color: #13002b;
+    background: var(--Colors-Primary-950, #0E0024);
+    border-top: 1px solid var(--Colors-Primary-500, #5A13FF);
     padding: 3rem 2rem 2rem;
     color: #ddd;
     font-size: 0.9rem;
@@ -653,6 +776,7 @@ input[type="range"] {
         overflow-y: auto;
         transform: translateX(-100%);
         transition: transform 0.3s ease;
+        font-family: 'Spartan';
     }
 
     .shop-sidebar.active {
@@ -666,18 +790,11 @@ input[type="range"] {
         gap: 0.5rem;
     }
 
-    .main-header {
-        padding: 1rem;
-    }
-
     .rewards-grid {
         grid-template-columns: 1fr;
     }
 }
 
-.badge-rank.legend {
-    background: #8a2be2;
-}
 
 /* Paginare */
 .pagination {
