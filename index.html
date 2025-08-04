@@ -49,7 +49,10 @@
                 <img src="assets/images/avatar-placeholder.png" alt="Avatar utilizator" />
             </div>
 
+        <div class="cart-wrapper">
             <img src="assets/icons/shopping-bag icon.png" alt="Cart" class="cart-icon" id="toggle-cart" />
+            <span class="cart-badge" id="cart-badge">1</span>
+        </div>
         </div>
     </header>
 
@@ -158,7 +161,7 @@
         <h2>Coșul meu</h2>
         <ul id="cart-items"></ul>
         <p>Total: <span id="cart-total">0</span> AP</p>
-        <button onclick="checkout()">Finalizează</button>
+        <button onclick="checkout()" id="checkout-btn">Finalizează</button>
     </aside>
 
     <!-- Modal -->

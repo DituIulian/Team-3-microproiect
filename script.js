@@ -292,7 +292,11 @@ const mockUser = {
   activityPoints: 11211
 };
 
-let availablePoints = mockUser.activityPoints; 
+// let getAvailablePoint() = mockUser.activityPoints; 
+function getAvailablePoint() {
+  const totalInCart = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  return mockUser.activityPoints - totalInCart;
+}
 
 const currentWeek = 5; // Poate vine dintr-o variabila globala, API, etc
 const rankInfo = getUserRankByWeek(currentWeek);
@@ -337,18 +341,16 @@ function displayRewards(rewards) {
 
 
 
- // Carduri
 paginatedRewards.forEach(reward => {
   const card = document.createElement("div");
   card.className = "reward-card";
 
-  // === Rank access logic ===
+
   const userRankOrder = ["Unranked", "Silver", "Gold", "Diamond", "Legend"];
   const userRankIndex = userRankOrder.indexOf(rankInfo.rank);
   const rewardRankIndex = userRankOrder.indexOf(reward.rank);
   const hasAccess = userRankIndex >= rewardRankIndex;
 
-  // === Butoane în funcție de condiții ===
   let actionHTML = '';
   if (!reward.inStock) {
     actionHTML = `<button class="out-of-stock-btn" disabled>Stoc epuizat</button>`;
@@ -359,12 +361,12 @@ paginatedRewards.forEach(reward => {
       <button onclick="openModal('${reward.id}')">Vezi detalii</button>
       <button 
         onclick="handleBuy('${reward.id}')"
-        ${availablePoints < reward.price ? 'disabled title="AP insuficient"' : ''}
+        ${getAvailablePoint() < reward.price ? 'disabled title="AP insuficient"' : ''}
       >Cumpără cu AP</button>
     `;
   }
 
-  // === Card final ===
+  // Card final 
   card.innerHTML = `
     <span class="favorite-btn ${favorites.includes(reward.id) ? 'active' : ''}" onclick="toggleFavorite('${reward.id}')">🤍</span>
 
@@ -377,7 +379,7 @@ paginatedRewards.forEach(reward => {
     <p class="category-tag">${reward.category}</p>
 
     <div class="price-rank-row">
-      <div class="price-cost ${availablePoints < reward.price ? 'not-enough' : ''}">${reward.price} AP ⚡</div>
+      <div class="price-cost ${getAvailablePoint() < reward.price ? 'not-enough' : ''}">${reward.price} AP ⚡</div>
       <span class="badge-rank ${reward.rank.toLowerCase()}">${reward.rank}</span>
     </div>
 
@@ -500,7 +502,7 @@ priceRangeCheckboxes.forEach(cb => {
   });
 });
 
-// eFiltrare
+// eFiltrare de refacut dupa API
 function applyFilters() {
   const checkboxes = document.querySelectorAll("input[type=checkbox]");
   const useSlider = intervalCheckbox.checked;
@@ -601,52 +603,126 @@ function handleBuy(rewardId) {
   const r = mockRewards.find(r => r.id === rewardId);
   if (!r) return;
 
-  const existing = cart.find(i => i.id === r.id);
-  const itemTotal = r.price;
-
-  if (itemTotal > availablePoints) {
+  const totalCart = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
+  if (totalCart + r.price > mockUser.activityPoints) {
     alert("Puncte insuficiente pentru acest produs!");
     return;
   }
 
+  const existing = cart.find(i => i.id === r.id);
   if (existing) {
     existing.quantity++;
   } else {
-    cart.push({ id: r.id, name: r.name, price: r.price, quantity: 1 });
+    cart.push({ id: r.id, name: r.name, price: r.price, quantity: 1, image: r.image, category: r.category });
   }
 
-  availablePoints -= itemTotal;
   updateCartUI();
-  updateUserPointsDisplay();
-  applyFilters(); // <--- AICI se face magia
+  displayRewards(mockRewards); 
 }
+
 
 
 
 function updateCartUI() {
-  const list = document.getElementById("cart-items");
-  list.innerHTML = "";
-  let total = 0;
-  cart.forEach(item => {
-    total += item.price * item.quantity;
-    const li = document.createElement("li");
-    li.textContent = `${item.name} x${item.quantity} – ${item.price * item.quantity} AP`;
-    list.appendChild(li);
-  });
-  document.getElementById("cart-total").textContent = total;
+ const list = document.getElementById("cart-items");
+list.innerHTML = "";
+
+const panel = document.getElementById("cart-panel");
+
+if (cart.length === 0) {
+  panel.classList.add("empty-cart");
+  list.innerHTML = `<div><img src="assets/icons/empty-bag.svg" alt="empty" /><p>Coșul de cumpărături este gol</p></div>`;
+  document.getElementById("cart-total").textContent = "0";
+  updateUserPointsDisplay();
+  return;
+} else {
+  panel.classList.remove("empty-cart");
 }
+
+
+const totalCartAP = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+
+cart.forEach(item => {
+  const itemTotal = item.price * item.quantity;
+  const totalWithoutCurrent = totalCartAP - itemTotal;
+  const costIfIncreased = totalWithoutCurrent + (item.quantity + 1) * item.price;
+  const disablePlus = costIfIncreased > mockUser.activityPoints;
+
+  const li = document.createElement("li");
+  li.className = "cart-item";
+  li.innerHTML = `
+    <div class="cart-item-img">
+      <img src="${item.image}" alt="${item.name}" />
+    </div>
+    <div class="cart-item-details">
+      <strong>${item.name}</strong>
+      <p class="category">${item.category || ""}</p>
+      <div class="quantity-control">
+        <button class="decrease cart-action" data-id="${item.id}">−</button>
+        <span>${item.quantity}</span>
+        <button 
+          class="increase cart-action" 
+          data-id="${item.id}" 
+          ${disablePlus ? 'disabled title="AP insuficient"' : ''}
+          style="${disablePlus ? 'opacity: 0.5; cursor: not-allowed;' : ''}"
+        >+</button>
+      </div>
+    </div>
+    <div class="cart-item-price">
+      ${item.price * item.quantity} AP ⚡
+      <button class="remove-item cart-action" data-id="${item.id}">🗑️</button>
+    </div>
+  `;
+
+  list.appendChild(li);
+});
+
+
+document.getElementById("cart-total").textContent = totalCartAP;
+updateUserPointsDisplay();
+
+const badge = document.getElementById("cart-badge");
+if (badge) {
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  badge.textContent = totalItems;
+  badge.style.display = totalItems > 0 ? "inline-block" : "none";
+}
+
+const checkoutBtn = document.getElementById("checkout-btn");
+checkoutBtn.disabled = totalCartAP === 0 || totalCartAP > mockUser.activityPoints;
+checkoutBtn.style.opacity = checkoutBtn.disabled ? "0.5" : "1";
+checkoutBtn.style.cursor = checkoutBtn.disabled ? "not-allowed" : "pointer";
+
+
+}
+
+
+
 
 function checkout() {
   if (cart.length === 0) return alert("Coșul este gol!");
 
   const total = cart.reduce((sum, i) => sum + i.price * i.quantity, 0);
-  if (total > availablePoints) return alert("Puncte insuficiente!");
+  if (total > mockUser.activityPoints) return alert("Puncte insuficiente!");
+
+  mockUser.activityPoints -= total;
 
   alert(`Comandă finalizată! Ai cheltuit ${total} AP.`);
   cart.length = 0;
   updateCartUI();
-  updateUserPointsDisplay(); 
+  updateUserPointsDisplay();
+  displayRewards(mockRewards); 
+
+  const badge = document.getElementById("cart-badge");
+  if (badge) {
+    badge.textContent = "0";
+    badge.style.display = "none";
+  }
+
+  document.getElementById("cart-panel").style.display = "none";
 }
+
+
 
 
 function toggleFilter(header) {
@@ -674,17 +750,29 @@ document.addEventListener("DOMContentLoaded", () => {
   });
 
   displayRewards(filtered);
+ });
+  
+  
+document.addEventListener("click", e => {
+  const cartPanel = document.getElementById("cart-panel");
+  const toggleBtn = document.getElementById("toggle-cart");
+
+  const clickedInsideCart = cartPanel.contains(e.target);
+  const clickedToggleBtn = toggleBtn.contains(e.target);
+  const isCartAction = e.target.classList.contains("cart-action");
+
+  if (!clickedInsideCart && !clickedToggleBtn && !isCartAction) {
+    cartPanel.style.display = "none";
+  }
 });
-  document.getElementById("toggle-cart").addEventListener("click", e => {
-    e.stopPropagation();
-    const panel = document.getElementById("cart-panel");
-    panel.style.display = panel.style.display === "block" ? "none" : "block";
-  });
-  document.addEventListener("click", e => {
-    const panel = document.getElementById("cart-panel");
-    const btn = document.getElementById("toggle-cart");
-    if (!panel.contains(e.target) && !btn.contains(e.target)) panel.style.display = "none";
-  });
+
+
+document.getElementById("toggle-cart").addEventListener("click", e => {
+  e.stopPropagation(); 
+  const panel = document.getElementById("cart-panel");
+  panel.style.display = panel.style.display === "block" ? "none" : "block";
+});
+
   document.getElementById("toggleFilters").addEventListener("click", () =>
     document.getElementById("filter-sidebar").classList.toggle("active")
   );
@@ -698,7 +786,6 @@ document.addEventListener("click", (e) => {
   const sidebar = document.getElementById("filter-sidebar");
   const toggle = document.getElementById("toggleFilters");
 
-  // Dacă este activ sidebar-ul și click-ul nu e înăuntru
   if (sidebar.classList.contains("active") && !sidebar.contains(e.target) && !toggle.contains(e.target)) {
     sidebar.classList.remove("active");
   }
@@ -743,5 +830,51 @@ function displayUserInfo(user) {
 }
 
 function updateUserPointsDisplay() {
-  document.querySelector(".user-points").textContent = `${availablePoints} AP ⚡`;
+  document.querySelector(".user-points").textContent = `${getAvailablePoint()} AP ⚡`;
 }
+
+document.getElementById("cart-items").addEventListener("click", function (e) {
+  const id = e.target.dataset.id;
+  if (!id) return;
+
+  //  Decrease
+  if (e.target.classList.contains("decrease")) {
+    const item = cart.find(p => p.id === id);
+    if (item && item.quantity > 1) {
+      item.quantity--;
+    } else {
+      const index = cart.findIndex(p => p.id === id);
+      if (index !== -1) cart.splice(index, 1);
+    }
+    updateCartUI();
+    displayRewards(mockRewards);
+  }
+
+ // Increase
+if (e.target.classList.contains("increase")) {
+  const item = cart.find(p => p.id === id);
+  if (item) {
+    const costTotalNou = cart.reduce((sum, i) => sum + i.price * i.quantity, 0) + item.price;
+
+    if (costTotalNou > mockUser.activityPoints) {
+      alert("Nu ai suficiente puncte pentru a adăuga încă un produs.");
+      return;
+    }
+
+    item.quantity++;
+    updateCartUI();
+    displayRewards(mockRewards);
+  }
+}
+
+
+  // Remove
+  if (e.target.classList.contains("remove-item")) {
+    const index = cart.findIndex(p => p.id === id);
+    if (index !== -1) {
+      cart.splice(index, 1);
+      updateCartUI();
+      displayRewards(mockRewards);
+    }
+  }
+});
