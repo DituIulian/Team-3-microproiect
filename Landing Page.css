@@ -17,7 +17,7 @@ img {
   background: linear-gradient(90deg, #2b1055, #1c0522);
   padding: 1rem 2rem;
   display: flex;
-  justify-content: space-between;
+  justify-content: flex-start;
   align-items: center;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
 }
@@ -101,6 +101,7 @@ img {
   margin-top: 1rem;
   color: #ff79c6;
   transition: color 0.3s ease, text-shadow 0.3s ease;
+  cursor: pointer;
 }
 
 .feature-box h3:hover {
