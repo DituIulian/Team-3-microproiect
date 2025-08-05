@@ -368,8 +368,11 @@ paginatedRewards.forEach(reward => {
 
   // Card final 
   card.innerHTML = `
-    <span class="favorite-btn ${favorites.includes(reward.id) ? 'active' : ''}" onclick="toggleFavorite('${reward.id}')">🤍</span>
-
+    <span class="favorite-btn ${favorites.includes(reward.id) ? 'active' : ''}"
+        onclick="toggleFavorite('${reward.id}')"
+        title="${favorites.includes(reward.id) ? 'Elimină din favorite' : 'Adaugă la favorite'}">
+    <i class="fa${favorites.includes(reward.id) ? 's' : 'r'} fa-heart"></i>
+  </span>
     <div class="img-wrapper">
       <img src="${reward.image}" alt="${reward.name}">
     </div>
@@ -418,23 +421,116 @@ function renderPagination(totalItems) {
   }
 }
 
+let currentModalQty = 1;
+
+function increaseModalQty() {
+  const rewardId = document.querySelector(".modal-add-btn").getAttribute("onclick").match(/'(.*?)'/)[1];
+  const r = mockRewards.find(r => r.id === rewardId);
+  if (!r) return;
+
+  const totalCartAP = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const futureTotal = totalCartAP + (currentModalQty + 1) * r.price;
+
+  if (futureTotal > mockUser.activityPoints) {
+    return; 
+  }
+
+  currentModalQty++;
+  document.getElementById("modal-qty").textContent = currentModalQty;
+
+  updateModalButtons(r);
+}
+
+function updateModalButtons(reward) {
+  const plusBtn = document.querySelector(".quantity-row button:nth-child(3)");
+  const minusBtn = document.querySelector(".quantity-row button:nth-child(1)");
+
+  const totalCartAP = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
+  const nextTotal = totalCartAP + (currentModalQty + 1) * reward.price;
+
+  plusBtn.disabled = nextTotal > mockUser.activityPoints;
+
+    if (plusBtn.disabled) {
+      plusBtn.setAttribute("title", "AP insuficient");
+    } else {
+      plusBtn.removeAttribute("title");
+    }
+
+
+  minusBtn.disabled = currentModalQty <= 1;
+}
+
+function decreaseModalQty() {
+  if (currentModalQty > 1) {
+    currentModalQty--;
+    document.getElementById("modal-qty").textContent = currentModalQty;
+
+    const rewardId = document.querySelector(".modal-add-btn").getAttribute("onclick").match(/'(.*?)'/)[1];
+    const r = mockRewards.find(r => r.id === rewardId);
+    updateModalButtons(r);
+  }
+}
+
+
+function addToCartFromModal(rewardId) {
+  for (let i = 0; i < currentModalQty; i++) {
+    handleBuy(rewardId);
+  }
+  closeModal();
+}
+
 
 function openModal(rewardId) {
   const r = mockRewards.find(r => r.id === rewardId);
   if (!r) return;
-  
-  document.getElementById("modal-image").src = r.image;
-  document.getElementById("modal-name").textContent = r.name;
-  document.getElementById("modal-description").textContent = r.fullDescription;
-  document.getElementById("modal-price").textContent = r.price;
-  document.getElementById("modal-stock").textContent = r.inStock ? `În stoc: ${r.stockCount}` : "Stoc epuizat";
-  document.getElementById("modal-buy-btn").onclick = () => {
-    handleBuy(r.id);
-    closeModal();
-  };
+
   const modal = document.getElementById("product-modal");
+  const modalContent = document.querySelector(".modal-content");
+
+  // Calculăm bara de stoc
+  const stockPercent = (r.stockCount / r.maxStock) * 100;
+
+  modalContent.innerHTML = `
+    <span class="close-btn" onclick="closeModal()">&times;</span>
+
+    <h2 class="modal-title">${r.name}</h2>
+
+    <div class="modal-image-wrapper">
+      <img src="${r.image}" alt="${r.name}" />
+      <div class="modal-badges">
+        <span class="badge-rank ${r.rank.toLowerCase()}">${r.rank}</span>
+        <span class="category-tag">${r.category}</span>
+      </div>
+    </div>
+
+    <p class="modal-description">${r.description}</p>
+
+    <h4>Specificații</h4>
+    <p class="modal-specs">${r.fullDescription}</p>
+
+    <div class="modal-price-row">
+      <div class="price-amount">${r.price} AP ⚡</div>
+    </div>
+
+    <div class="stock-bar">
+      <div class="stock-fill" style="width:${stockPercent}%"></div>
+      <span class="stock-text">${r.stockCount}/${r.maxStock}</span>
+    </div>
+
+    <div class="quantity-row">
+      <button onclick="decreaseModalQty()">−</button>
+      <span id="modal-qty">1</span>
+      <button onclick="increaseModalQty()">+</button>
+    </div>
+
+    <button class="modal-add-btn" onclick="addToCartFromModal('${r.id}')">Adaugă în coș</button>
+  `;
+
   modal.classList.remove("hidden");
   modal.style.display = "flex";
+  currentModalQty = 1;
+  updateModalButtons(r);
+  
   document.getElementById("product-modal").addEventListener("click", (e) => {
   const modalContent = document.querySelector(".modal-content");
   if (!modalContent.contains(e.target)) {
@@ -442,6 +538,7 @@ function openModal(rewardId) {
   }
 });
 }
+
 
 // Sidebar filtrare
 
@@ -624,15 +721,25 @@ function handleBuy(rewardId) {
 
 
 function updateCartUI() {
+  
  const list = document.getElementById("cart-items");
-list.innerHTML = "";
-
-const panel = document.getElementById("cart-panel");
+ const panel = document.getElementById("cart-panel");
+  list.innerHTML = "";
+  
+ const totalCartAP = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
 if (cart.length === 0) {
   panel.classList.add("empty-cart");
   list.innerHTML = `<div><img src="assets/icons/empty-bag.svg" alt="empty" /><p>Coșul de cumpărături este gol</p></div>`;
   document.getElementById("cart-total").textContent = "0";
+
+const badge = document.getElementById("cart-badge");
+if (badge) {
+  const totalItems = cart.reduce((acc, item) => acc + item.quantity, 0);
+  badge.textContent = totalItems;
+  badge.style.display = totalItems > 0 ? "inline-block" : "none";
+}
+
   updateUserPointsDisplay();
   return;
 } else {
@@ -640,7 +747,6 @@ if (cart.length === 0) {
 }
 
 
-const totalCartAP = cart.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
 cart.forEach(item => {
   const itemTotal = item.price * item.quantity;
@@ -802,14 +908,29 @@ const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
 
 function toggleFavorite(id) {
   const index = favorites.indexOf(id);
+
   if (index >= 0) {
     favorites.splice(index, 1);
   } else {
     favorites.push(id);
   }
+
   localStorage.setItem("favorites", JSON.stringify(favorites));
-  displayRewards(mockRewards);
+
+
+  const heartBtn = document.querySelector(`.favorite-btn[onclick="toggleFavorite('${id}')"] i`);
+  if (heartBtn) {
+    heartBtn.classList.remove("animate");
+    void heartBtn.offsetWidth;
+    heartBtn.classList.add("animate");
+  }
+
+  setTimeout(() => {
+    displayRewards(mockRewards);
+  }, 300); 
 }
+
+
 
 const lastSearches = JSON.parse(localStorage.getItem("lastSearches")) || [];
 
@@ -878,3 +999,27 @@ if (e.target.classList.contains("increase")) {
     }
   }
 });
+
+
+function toggleUserMenu() {
+  const menu = document.getElementById("user-menu");
+  menu.classList.toggle("hidden");
+}
+
+document.addEventListener("click", (e) => {
+  const avatarWrapper = document.querySelector(".user-avatar-wrapper");
+  if (!avatarWrapper.contains(e.target)) {
+    document.getElementById("user-menu").classList.add("hidden");
+  }
+});
+
+function filterFavorites() {
+  const favorites = JSON.parse(localStorage.getItem("favorites")) || [];
+  const favoriteRewards = mockRewards.filter(reward => favorites.includes(reward.id));
+  displayRewards(favoriteRewards);
+
+  document.getElementById("user-menu").classList.add("hidden");
+
+  document.getElementById("show-all-btn")?.classList.remove("hidden");
+}
+

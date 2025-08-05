@@ -7,6 +7,7 @@
     <title>GT Shop</title>
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Karla">
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Spartan">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.css" rel="stylesheet" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
@@ -45,9 +46,20 @@
 
             <div class="user-points">9400 AP ⚡</div>
 
-            <div class="user-avatar">
-                <img src="assets/images/avatar-placeholder.png" alt="Avatar utilizator" />
+            <div class="user-avatar-wrapper">
+                <div class="user-avatar" onclick="toggleUserMenu()">
+                    <img src="assets/images/avatar-placeholder.png" alt="Avatar utilizator" />
+                </div>
+            
+                <ul class="user-menu hidden" id="user-menu">
+                    <li onclick="openHistory()">🧍 Istoricul meu</li>
+                    <li onclick="openPoints()">⚡ Punctele mele</li>
+                    <li onclick="openNotifications()">🔔 Setări notificări</li>
+                    <li onclick="filterFavorites()" id="btn-favorite-view">💜 Favoritele mele</li>
+                    <li onclick="logout()">🚪 Log Out</li>
+                </ul>
             </div>
+
 
         <div class="cart-wrapper">
             <img src="assets/icons/shopping-bag icon.png" alt="Cart" class="cart-icon" id="toggle-cart" />
@@ -150,6 +162,7 @@
         </aside>
 
         <!-- Produse -->
+
         <section class="rewards-grid" id="rewards-container"></section>
         
     </main>

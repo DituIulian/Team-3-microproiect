@@ -200,7 +200,6 @@ input[type="range"] {
 }
 
 /* Card actions */
-/* Card actions */
 .card-actions {
     display: flex;
     gap: 0.5rem;
@@ -276,6 +275,39 @@ input[type="range"] {
     border-radius: 50%;
     border: 2px solid #fff;
 }
+
+.user-avatar-wrapper {
+    position: relative;
+}
+
+.user-menu {
+    position: absolute;
+    top: 60px;
+    right: 0;
+    background: #1a0033;
+    border-radius: 12px;
+    padding: 0.5rem 0;
+    width: 200px;
+    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+    z-index: 10;
+}
+
+.user-menu li {
+    padding: 0.75rem 1rem;
+    color: white;
+    cursor: pointer;
+    transition: background 0.2s ease;
+    font-size: 0.95rem;
+}
+
+.user-menu li:hover {
+    background: rgba(255, 255, 255, 0.05);
+}
+
+.user-menu.hidden {
+    display: none;
+}
+
 
 
 /* Buton filtre (pentru mobil) */
@@ -381,7 +413,7 @@ input[type="range"] {
     background: linear-gradient(to right, #a2ff86, #ff66cc);
 }
 
-/* Handle mic și corect poziționat */
+
 .noUi-horizontal .noUi-handle {
     background: white;
     border: 2px solid #a2ff86;
@@ -390,18 +422,15 @@ input[type="range"] {
     height: 14px;
     top: -5px;
     right: -7px;
-    /* foarte important pt poziționare corectă */
     cursor: pointer;
     box-shadow: none;
 }
 
-/* Tooltip (ascuns implicit) */
 .noUi-tooltip {
     display: none;
    
 }
 
-/* Afișăm tooltip doar la hover sau focus */
 .noUi-handle:hover .noUi-tooltip,
 .noUi-handle:focus .noUi-tooltip,
 .noUi-active .noUi-tooltip {
@@ -567,6 +596,8 @@ input[type="range"] {
     max-width: 500px;
     width: 90%;
     position: relative;
+    max-height: 90vh;
+    overflow-y: auto;
 }
 
 .modal-content img {
@@ -626,6 +657,109 @@ input[type="range"] {
     object-fit: contain;
 }
 
+.modal-title {
+    font-size: 1.4rem;
+    margin-bottom: 0.6rem;
+    font-weight: bold;
+    text-align: center;
+}
+
+.modal-image-wrapper {
+    position: relative;
+    margin-bottom: 1rem;
+}
+
+.modal-image-wrapper img {
+    width: 100%;
+    max-height: 180px;
+    object-fit: contain;
+    background: #fff;
+    border-radius: 8px;
+    padding: 10px;
+}
+
+.modal-badges {
+    position: absolute;
+    top: 8px;
+    left: 8px;
+    display: flex;
+    gap: 0.5rem;
+}
+
+.modal-description {
+    font-size: 0.95rem;
+    margin: 1rem 0 0.5rem;
+    color: #ddd;
+}
+
+.modal-specs {
+    font-size: 0.9rem;
+    margin-bottom: 1rem;
+    color: #ccc;
+}
+
+.modal-price-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 1rem;
+}
+
+.price-amount {
+    font-size: 1.3rem;
+    font-weight: bold;
+    color: #a2ff86;
+}
+
+.quantity-row {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+}
+
+.quantity-row button {
+    width: 32px;
+    height: 32px;
+    font-size: 1.4rem;
+    border: none;
+    background-color: #3f165b;
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+}
+
+.quantity-row button:hover {
+    background-color: #a2ff86;
+    color: #1e002f;
+}
+
+.modal-add-btn {
+    background-color: #ff007a;
+    border: none;
+    padding: 0.8rem 1rem;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    font-size: 1rem;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.modal-add-btn:hover {
+    background-color: #ff3399;
+}
+
+.quantity-row button:disabled {
+    background-color: #555;
+    color: #aaa;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+
 /* Pret + rank*/
 .price-rank-row {
     display: flex;
@@ -656,8 +790,6 @@ input[type="range"] {
 }
 
 /*Cos de cumparaturi */
-
-/* === COS DE CUMPĂRĂTURI === */
 
 .cart-panel {
     display: none;
@@ -796,7 +928,35 @@ input[type="range"] {
     margin-bottom: 1rem;
 }
 
-/* === Mesaj coș gol === */
+
+
+
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background: radial-gradient(circle at center, rgba(30, 77, 21, 0.15), rgba(255, 255, 255, 0.05));
+    padding: 10px;
+    border-radius: 50%;
+    cursor: pointer;
+    z-index: 2;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(39px);
+}
+
+.favorite-btn i {
+    font-size: 1.2rem;
+    color: white;
+    transition: color 0.3s ease;
+}
+
+.favorite-btn.active i {
+    color: #ff005c;
+}
+
+
+
+/* Mesaj cos gol */
 .cart-panel.empty-cart {
     display: flex;
     flex-direction: column;
@@ -814,7 +974,7 @@ input[type="range"] {
     margin-bottom: 1rem;
 }
 
-/* === Badge și icon === */
+/* Badge și icon */
 .cart-wrapper {
     position: relative;
     display: inline-block;
@@ -956,6 +1116,47 @@ input[type="range"] {
 }
 
 
+/* Paginare */
+.pagination {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-top: 2rem;
+    flex-wrap: wrap;
+}
+
+.pagination button {
+    background-color: #320059;
+    color: #fff;
+    border: 1px solid #a2ff86;
+    padding: 0.4rem 0.9rem;
+    border-radius: 6px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s, transform 0.2s;
+}
+
+.pagination button:hover {
+    background-color: #a2ff86;
+    color: #000;
+    transform: scale(1.05);
+}
+
+.pagination button.active {
+    background-color: #a2ff86;
+    color: #1a003d;
+}
+
+.category-tag {
+    display: inline-block;
+    background-color: #00b894;
+    color: #fff;
+    padding: 0.2rem 0.6rem;
+    border-radius: 10px;
+    font-size: 0.75rem;
+    margin: 0.3rem 0;
+
+}
 
 /* Responsive */
 
@@ -1021,65 +1222,23 @@ input[type="range"] {
 }
 
 
-/* Paginare */
-.pagination {
-    display: flex;
-    justify-content: center;
-    gap: 0.5rem;
-    margin-top: 2rem;
-    flex-wrap: wrap;
+/* Animatie btn favorite */
+
+@keyframes flip-heart {
+    0% {
+        transform: rotateZ(0deg) scale(1);
+    }
+
+    50% {
+        transform: rotateZ(180deg) scale(1.2);
+    }
+
+    100% {
+        transform: rotateZ(360deg) scale(1);
+    }
 }
 
-.pagination button {
-    background-color: #320059;
-    color: #fff;
-    border: 1px solid #a2ff86;
-    padding: 0.4rem 0.9rem;
-    border-radius: 6px;
-    cursor: pointer;
-    font-weight: bold;
-    transition: background-color 0.3s, transform 0.2s;
-}
-
-.pagination button:hover {
-    background-color: #a2ff86;
-    color: #000;
-    transform: scale(1.05);
-}
-
-.pagination button.active {
-    background-color: #a2ff86;
-    color: #1a003d;
-}
-
-.category-tag {
-    display: inline-block;
-    background-color: #00b894;
-    color: #fff;
-    padding: 0.2rem 0.6rem;
-    border-radius: 10px;
-    font-size: 0.75rem;
-    margin: 0.3rem 0;
-    
-}
-
-.favorite-btn {
-    position: absolute;
-    top: 10px;
-    right: 10px;
-    background-color: #1f004d;
-    padding: 5px 6px;
-    border-radius: 50%;
-    font-size: 1.2rem;
-    cursor: pointer;
-    transition: transform 0.2s ease;
-    z-index: 2;
-}
-
-.favorite-btn:hover {
-    transform: scale(1.2);
-}
-
-.favorite-btn.active {
-    color: #ff005c;
+.favorite-btn i.animate {
+    animation: flip-heart 0.4s ease-in-out;
+    backface-visibility: hidden;
 }
