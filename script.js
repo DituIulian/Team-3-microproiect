@@ -949,6 +949,7 @@ function displayUserInfo(user) {
   document.querySelector(".progress-bar").style.width = `${progress}%`;
   document.querySelector(".user-points").textContent = `${user.activityPoints} AP ⚡`;
   document.querySelector(".user-avatar img").src = user.avatar;
+   document.getElementById("user-name").textContent = user.name || "Utilizator";
   updateUserPointsDisplay();
 }
 

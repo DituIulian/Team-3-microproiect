@@ -11,7 +11,6 @@ body {
 }
 
 img {
-    max-width: 100%;
     height: auto;
 }
 
@@ -20,15 +19,24 @@ input[type="range"] {
     accent-color: #a2ff86;
 }
 
-/* 🔝 Header */
+/* navbar */
 .main-header {
     display: flex;
     align-items: center;
     justify-content: space-between;
     background: linear-gradient(270.4deg, rgba(106, 50, 170, 0.264) 2.53%, rgba(38, 0, 91, 0.8) 100%);
     padding: 1rem 2rem;
-    flex-wrap: wrap;
+
     gap: 1rem;
+}
+
+.header-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 2rem;
+    width: 100%;
 }
 
 .header-left,
@@ -43,7 +51,8 @@ input[type="range"] {
 }
 
 .header-left .gt-logo {
-    height: 40px;
+    height: 48px;
+    max-width: 160px;
 }
 
 .header-center {
@@ -71,7 +80,11 @@ input[type="range"] {
     justify-content: flex-end;
     align-items: center;
     gap: 1.2rem;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
+}
+.gt-logo {
+    height: 48px;
+    width: auto;
 }
 
 /* ===== USER RANK - HEADER ===== */
@@ -175,6 +188,14 @@ input[type="range"] {
     color: #ff4d4f;
 }
 
+.user-name {
+    font-weight: bold;
+    color: white;
+    font-size: 0.9rem;
+    margin-left: 0.5rem;
+    white-space: nowrap;
+}
+
 /* Bara de stoc */
 .stock-bar {
     position: relative;
@@ -266,6 +287,10 @@ input[type="range"] {
 .user-points {
     font-weight: bold;
     font-size: 0.9rem;
+    display: flex;
+    align-items: center;
+    white-space: nowrap;
+    gap: 0.3rem;
 }
 
 /* Avatar */
@@ -307,6 +332,31 @@ input[type="range"] {
 .user-menu.hidden {
     display: none;
 }
+
+.user-pill {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    padding: 0.4rem 0.8rem;
+    background: rgba(100, 50, 255, 0.1);
+    border: 2px solid #7a5cff;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+    
+}
+
+.user-pill:hover {
+    background: rgba(122, 92, 255, 0.2);
+}
+
+.user-avatar {
+    width: 32px;
+    height: 32px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
 
 
 
@@ -1009,6 +1059,8 @@ input[type="range"] {
     opacity: 0.6;
 }
 
+
+
 /* FOOTER */
 .main-footer {
     background: var(--Colors-Primary-950, #0E0024);
@@ -1160,6 +1212,90 @@ input[type="range"] {
 
 /* Responsive */
 
+@media screen and (min-width: 993px) {
+    .header-container {
+        flex-direction: row;
+    }
+}
+
+@media screen and (max-width: 992px) {
+    .main-header {
+            padding: 1rem;
+        }
+    
+        .header-container {
+            display: flex;
+            flex-direction: column;
+            width: 100%;
+            gap: 1rem;
+        }
+    
+        .header-left {
+            display: flex;
+            justify-content: flex-start;
+            align-items: center;
+        }
+    
+        .gt-logo {
+            height: 40px;
+            max-width: 160px;
+        }
+    
+        .header-right {
+            display: flex;
+            flex-wrap: nowrap;
+            gap: 0.8rem;
+            align-items: center;
+            justify-content: space-between;
+            width: 100%;
+        }
+    
+        .user-rank {
+            flex: 1 1 100%;
+            max-width: 100%;
+        }
+    
+        .user-points,
+        .user-name,
+        .user-avatar-wrapper,
+        .cart-wrapper {
+            display: flex;
+            align-items: center;
+            gap: 0.4rem;
+        }
+    
+        .user-name {
+            font-size: 0.9rem;
+            font-weight: bold;
+            white-space: nowrap;
+        }
+    
+        .header-center {
+            width: 100%;
+            order: 3;
+        }
+    
+        .header-center input {
+            width: 100%;
+            padding: 0.6rem 1rem;
+            border-radius: 25px;
+            font-size: 1rem;
+            background-color: #320059;
+            color: white;
+            border: none;
+        }
+    
+        .header-center input::placeholder {
+            color: #aaa;
+        }
+        .user-pill .user-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            margin-right: 3.3rem;
+        }
+    }
+
 @media screen and (max-width: 768px) {
 
     .close-btn-mobile {
@@ -1219,7 +1355,63 @@ input[type="range"] {
     .rewards-grid {
         grid-template-columns: 1fr;
     }
+ .header-right {
+     flex-direction: row;
+     justify-content: flex-end;
+     align-items: center;
+     flex-wrap: wrap;
+     gap: 0.5rem;
+ }
+
+ .header-center input {
+     max-width: 100%;
+     font-size: 1rem;
+ }
+
+ .user-name {
+     display: none;
+ }
+
+  .user-pill {
+      padding: 0;
+      border: none;
+      background: none;
+      
+  }
+    .user-pill .user-name {
+        display: none;
+    }
+    
+
+    .user-pill .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+    }
 }
+
+@media screen and (max-width: 576px) {
+    .user-rank {
+        padding: 0;
+        font-size: 0.75rem;
+    }
+
+    .rank-info {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+
+    .progress-bar {
+        height: 4px;
+    }
+
+    .badge-rank {
+        font-size: 0.65rem;
+        padding: 2px 8px;
+    }
+
+        }
+
 
 
 /* Animatie btn favorite */
