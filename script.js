@@ -284,6 +284,8 @@ const mockRewards = [
   }
 ];
 
+let filteredRewards = [...mockRewards];
+
 // Mock user
 const mockUser = {
   id: "u123",
@@ -333,11 +335,13 @@ let currentPage = 1;
 const itemsPerPage = 12;
 
 function displayRewards(rewards) {
+  
   const container = document.getElementById("rewards-container");
   container.innerHTML = "";
 
-  const start = (currentPage - 1) * itemsPerPage;
-  const paginatedRewards = rewards.slice(start, start + itemsPerPage);
+ const start = (currentPage - 1) * itemsPerPage;
+const paginatedRewards = rewards.slice(start, start + itemsPerPage);
+
 
 
 
@@ -415,11 +419,12 @@ function renderPagination(totalItems) {
     btn.className = (i === currentPage ? "active" : "");
     btn.onclick = () => {
       currentPage = i;
-      applyFilters(); 
+      displayRewards(filteredRewards); // Afișăm pagina i din lista filtrată
     };
     paginationContainer.appendChild(btn);
   }
 }
+
 
 let currentModalQty = 1;
 
@@ -615,7 +620,6 @@ function applyFilters() {
     stock: [],
   };
 
-  
   checkboxes.forEach(cb => {
     if (cb.checked) {
       const label = cb.parentElement.textContent.trim().toLowerCase();
@@ -637,57 +641,55 @@ function applyFilters() {
       ) {
         activeFilters.type.push(cb.parentElement.textContent.trim());
       } else if (
-      label.includes("în stoc") || label.includes("noutăți") || label.includes("stoc epuizat")
-    ) {
-      activeFilters.stock.push(label); 
-    }
-
+        label.includes("în stoc") || label.includes("noutăți") || label.includes("stoc epuizat")
+      ) {
+        activeFilters.stock.push(label);
+      }
     }
   });
 
+  // Aplicăm filtrele
+  filteredRewards = mockRewards.filter(item => {
+    let priceOK = true;
 
- const filtered = mockRewards.filter(item => {
- 
- let priceOK = true;
+    // Filtru pe slider
+    if (useSlider && priceSliderElement.noUiSlider) {
+      const [min, max] = priceSliderElement.noUiSlider.get();
+      priceOK = item.price >= parseInt(min) && item.price <= parseInt(max);
+    } else {
+      const priceRanges = [];
 
-if (useSlider && priceSliderElement.noUiSlider) {
-  const [min, max] = priceSliderElement.noUiSlider.get();
-  priceOK = item.price >= parseInt(min) && item.price <= parseInt(max);
-} else {
-  const priceRanges = [];
+      if (lowChecked) priceRanges.push([0, 500]);
+      if (mediumChecked) priceRanges.push([501, 1000]);
+      if (highChecked) priceRanges.push([1001, Infinity]);
 
-  if (lowChecked) priceRanges.push([0, 500]);
-  if (mediumChecked) priceRanges.push([501, 1000]);
-  if (highChecked) priceRanges.push([1001, Infinity]);
+      if (priceRanges.length > 0) {
+        priceOK = priceRanges.some(([min, max]) => item.price >= min && item.price <= max);
+      }
+    }
 
-  if (priceRanges.length > 0) {
-    priceOK = priceRanges.some(([min, max]) => item.price >= min && item.price <= max);
-  }
+    // Filtru pe stoc
+    let stockOK = true;
+    if (activeFilters.stock.length) {
+      stockOK = activeFilters.stock.some(condition => {
+        if (condition === "în stoc") return item.stockCount > 0;
+        if (condition === "stoc epuizat") return item.stockCount === 0;
+        if (condition === "noutăți") return item.stockCount >= 1 && item.stockCount <= 3;
+        return true;
+      });
+    }
+
+    const catOK = !activeFilters.category.length || activeFilters.category.includes(item.category);
+    const rankOK = !activeFilters.rank.length || activeFilters.rank.includes(item.rank);
+    const typeOK = !activeFilters.type.length || activeFilters.type.includes(item.type);
+
+    return priceOK && stockOK && catOK && rankOK && typeOK;
+  });
+
+  currentPage = 1; // Resetăm pagina la 1
+  displayRewards(filteredRewards); // Afișăm produsele filtrate
 }
 
-
-
-  let stockOK = true;
-  if (activeFilters.stock.length) {
-    stockOK = activeFilters.stock.some(condition => {
-      if (condition === "în stoc") return item.stockCount > 0;
-      if (condition === "stoc epuizat") return item.stockCount === 0;
-      if (condition === "noutăți") return item.stockCount >= 1 && item.stockCount <= 3; // de redefinit
-      return true;
-    });
-  }
-
-  const catOK = !activeFilters.category.length || activeFilters.category.includes(item.category);
-  const rankOK = !activeFilters.rank.length || activeFilters.rank.includes(item.rank);
-   const typeOK = !activeFilters.type.length || activeFilters.type.includes(item.type);
-   
-
-  return priceOK && stockOK && catOK && rankOK && typeOK;
-});
-
- 
-  displayRewards(filtered);
-}
 
 
 function closeModal() {
