@@ -111,7 +111,7 @@ input[type="range"] {
 .badge-rank {
     display: inline-block;
     padding: 4px 12px;
-    border-radius: 20px;
+    border-radius: 4px;
     color: white;
     text-transform: uppercase;
     text-align: center;
@@ -120,6 +120,7 @@ input[type="range"] {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 0.7rem;
 }
 
 .badge-rank.gold {
@@ -178,15 +179,6 @@ input[type="range"] {
     transition: width 0.3s ease;
 }
 
-.price-cost {
-    font-weight: bold;
-    margin: 0.5rem 0;
-    color: #a2ff86;
-}
-
-.price-cost.not-enough {
-    color: #ff4d4f;
-}
 
 .user-name {
     font-weight: bold;
@@ -229,23 +221,23 @@ input[type="range"] {
 }
 
 .card-actions button {
-    flex: 1;
+    /* flex: 1; */
     padding: 0.5rem;
     border-radius: 6px;
-    border: none;
-    font-size: 0.9rem;
+    /* border: none; */
+    font-size: 0.7rem;
     cursor: pointer;
     text-align: center;
-    line-height: 1.2;
+    /* line-height: 1.2; */
     min-height: 44px;
-    white-space: normal;
+    /* white-space: normal; */
    
 }
 
 .card-actions button:first-child {
     background: transparent;
     color: #fff;
-    border: 1px solid #fff;
+    border: 1px solid #E40674;
     transition: background 0.2s, color 0.2s;
 }
 
@@ -255,13 +247,13 @@ input[type="range"] {
 }
 
 .card-actions button:last-child {
-    background: #ff005c;
+    background: #E40674;
     color: #fff;
     transition: background 0.2s;
 }
 
 .card-actions button:last-child:hover:not(:disabled) {
-    background: #ff3377;
+    background: #E40674;
 }
 
 .card-actions button:disabled {
@@ -530,6 +522,7 @@ input[type="range"] {
     border-radius: 8px;
     margin-bottom: 1rem;
     padding: 10px;
+    box-shadow: 0px 2px 4px 0px #0000001F;
 }
 
 .img-wrapper img {
@@ -565,6 +558,7 @@ input[type="range"] {
     box-orient: vertical;
 }
 
+/* card actions */
 .card-actions {
     display: flex;
     gap: 0.5rem;
@@ -640,14 +634,15 @@ input[type="range"] {
 }
 
 .modal-content {
-    background-color: #2b005a;
+    background: var(--Primary-950, #0E0024);
     padding: 2rem;
     border-radius: 10px;
-    max-width: 500px;
+    max-width: 40rem;
     width: 90%;
     position: relative;
     max-height: 90vh;
     overflow-y: auto;
+    border: 2px solid var(--Primary-900, #3F00B0)
 }
 
 .modal-content img {
@@ -676,7 +671,7 @@ input[type="range"] {
     right: 12px;
     font-size: 1.4rem;
     color: #fff;
-    background: #ff005c;
+    background: var(--Neutral-950, #333333);
     border: none;
     border-radius: 50%;
     width: 32px;
@@ -689,7 +684,7 @@ input[type="range"] {
 }
 
 .close-btn:hover {
-    background: #ff3377;
+    background: #ea6491;
 }
 .img-wrapper {
     height: 160px;
@@ -708,10 +703,11 @@ input[type="range"] {
 }
 
 .modal-title {
-    font-size: 1.4rem;
-    margin-bottom: 0.6rem;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
+    text-align: left;
     font-weight: bold;
-    text-align: center;
+    color: white;
 }
 
 .modal-image-wrapper {
@@ -809,6 +805,101 @@ input[type="range"] {
     opacity: 0.6;
 }
 
+.modal-columns {
+    display: flex;
+    gap: 2rem;
+    flex-direction: row;
+    flex-wrap: wrap;
+}
+
+.modal-left {
+    flex: 2;
+    min-width: 300px;
+    max-height: 40vh;
+    overflow-y: auto;
+    padding-right: 1rem;
+}
+
+.modal-left::-webkit-scrollbar {
+    width: 6px;
+}
+
+.modal-left::-webkit-scrollbar-thumb {
+    background-color: #4A00E4;
+    border-radius: 10px;
+}
+
+.modal-right {
+    flex: 1;
+    min-width: 250px;
+    display: flex;
+    flex-direction: column;
+    gap: 1.5rem;
+    align-items: stretch;
+}
+
+.modal-price-box {
+    background: var(--Colors-Primary-800, #4A00E4);
+    padding: 1rem;
+    border-radius: 8px;
+    text-align: center;
+    color: white;
+}
+
+.price-value {
+    font-size: 1.6rem;
+    font-weight: bold;
+    display: block;
+}
+
+.price-label {
+    font-size: 0.85rem;
+    color: #ccc;
+    margin-top: 0.2rem;
+}
+
+.modal-stock label,
+.quantity-row label {
+    font-weight: bold;
+    font-size: 0.85rem;
+    margin-bottom: 0.2rem;
+    display: block;
+    color: #eee;
+}
+
+.quantity-controls {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 1rem;
+}
+
+.quantity-controls button {
+    width: 32px;
+    height: 32px;
+    font-size: 1.4rem;
+    background: var(--Primary-950, #0E0024);
+    color: white;
+    border-radius: 50%;
+    cursor: pointer;
+    border: 2px solid var(--Border-Primary-Default, #5300FF)
+}
+
+.quantity-controls button:hover {
+    background-color: var(--Colors-Primary-800, #4A00E4);
+    color: white;
+}
+
+.modal-specs ul {
+    list-style: disc;
+    padding-left: 1.2rem;
+    color: #ccc;
+}
+
+.modal-specs li {
+    margin-bottom: 0.3rem;
+}
+
 
 /* Pret + rank*/
 .price-rank-row {
@@ -818,20 +909,11 @@ input[type="range"] {
     margin: 1.2rem 0;
 }
 
-/* Badge rank */
-.badge-rank {
-    padding: 0.2rem 0.6rem;
-    border-radius: 12px;
-    color: #fff;
-    font-size: 0.7rem;
-    text-transform: uppercase;
-    font-weight: bold;
-}
+
 
 /* Culoare pret*/
 .price-cost {
     font-weight: bold;
-    color: #a2ff86;
     font-size: 1rem;
 }
 
@@ -847,20 +929,18 @@ input[type="range"] {
     top: 100px;
     right: 2rem;
     width: 320px;
-    background-color: #1e002f;
+    background: var(--Primary-950, #0E0024);
     padding: 1.2rem;
     border-radius: 18px;
-    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-    border: 2px solid #a2ff86;
+    border: 2px solid #2c014a;
     z-index: 100;
     color: white;
-    font-family: 'Karla', sans-serif;
+    box-shadow: 0px 30px 40px 0px #00000026;
 }
 
 .cart-panel h2 {
     font-size: 1.2rem;
     margin-bottom: 0.8rem;
-    color: #a2ff86;
 }
 
 .cart-panel ul {
@@ -1201,12 +1281,13 @@ input[type="range"] {
 
 .category-tag {
     display: inline-block;
-    background-color: #00b894;
+    background: linear-gradient(90deg, #998FFD 0%, #473DA6 100%);
     color: #fff;
     padding: 0.2rem 0.6rem;
-    border-radius: 10px;
+    border-radius: 4px;
     font-size: 0.75rem;
-    margin: 0.3rem 0;
+    width: fit-content;
+    opacity: 1;
 
 }
 

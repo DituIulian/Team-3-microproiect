@@ -5,15 +5,15 @@ const mockRewards = [
   {
     id: "r1",
     name: "Tastatură RGB Mech-X Tastatură RGB Mech-X Tastatură RGB Mech-X",
-    description: " Taste mecanice rapide și durabileTaste mecanice rapide și durabileTaste mecanice rapide și durabileTaste mecanice rapide și durabile",
-    fullDescription: "Tastatură RGB Mech-X cu iluminare personalizabilă și switch-uri performante.",
+    description: " Taste mecanice rapide și durabileTasteastaste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste e mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste  mecanice rapide și durabileTaste mecanice rapide și durabileTaste mecanice rapide și durabile",
+    fullDescription: "Tastatură RGaste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste asteaste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste  mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste B Mech-X cu iluminare personalizabilă și switch-uri performante.",
     price: 1200,
     image: "assets/images/keyboard.jpg",
     inStock: true,
     stockCount: 8,
     maxStock: 10,
     rank: "Silver",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "legendary"
   },
   {
@@ -27,7 +27,7 @@ const mockRewards = [
     stockCount: 5,
     maxStock: 10,
     rank: "Gold",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Rar"
   },
   {
@@ -41,7 +41,7 @@ const mockRewards = [
     stockCount: 6,
     maxStock: 10,
     rank: "Legend",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Legendary"
   },
   {
@@ -69,7 +69,7 @@ const mockRewards = [
     stockCount: 4,
     maxStock: 10,
     rank: "Silver",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Popular"
   },
   {
@@ -83,7 +83,7 @@ const mockRewards = [
     stockCount: 0,
     maxStock: 10,
     rank: "Diamond",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Legendary"
   },
   {
@@ -97,7 +97,7 @@ const mockRewards = [
     stockCount: 3,
     maxStock: 10,
     rank: "Silver",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Rar"
   },
   {
@@ -111,7 +111,7 @@ const mockRewards = [
     stockCount: 7,
     maxStock: 10,
     rank: "Gold",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Popular"
   },
   {
@@ -125,7 +125,7 @@ const mockRewards = [
     stockCount: 2,
     maxStock: 10,
     rank: "Silver",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Rar"
   },
   {
@@ -139,7 +139,7 @@ const mockRewards = [
     stockCount: 10,
     maxStock: 10,
     rank: "Diamond",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Legendary"
   },
   {
@@ -153,7 +153,7 @@ const mockRewards = [
     stockCount: 1,
     maxStock: 10,
     rank: "Silver",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Popular"
   },
   {
@@ -167,7 +167,7 @@ const mockRewards = [
     stockCount: 6,
     maxStock: 10,
     rank: "Gold",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Rar"
   },
   {
@@ -195,7 +195,7 @@ const mockRewards = [
     stockCount: 8,
     maxStock: 10,
     rank: "Gold",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Popular"
   },
   {
@@ -209,7 +209,7 @@ const mockRewards = [
     stockCount: 4,
     maxStock: 10,
     rank: "Silver",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Rar"
   },
   {
@@ -223,7 +223,7 @@ const mockRewards = [
     stockCount: 5,
     maxStock: 10,
     rank: "Gold",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Popular"
   },
   {
@@ -237,7 +237,7 @@ const mockRewards = [
     stockCount: 0,
     maxStock: 10,
     rank: "Silver",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Rar"
   },
   {
@@ -251,7 +251,7 @@ const mockRewards = [
     stockCount: 9,
     maxStock: 10,
     rank: "Gold",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Popular"
   },
   {
@@ -265,7 +265,7 @@ const mockRewards = [
     stockCount: 2,
     maxStock: 10,
     rank: "Diamond",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Legendary"
   },
   {
@@ -279,7 +279,7 @@ const mockRewards = [
     stockCount: 7,
     maxStock: 10,
     rank: "Silver",
-    category: "Accesorii Tech & Gaming",
+    category: "Tech & Gaming",
     type: "Popular"
   }
 ];
@@ -495,41 +495,73 @@ function openModal(rewardId) {
   // Calculăm bara de stoc
   const stockPercent = (r.stockCount / r.maxStock) * 100;
 
-  modalContent.innerHTML = `
-    <span class="close-btn" onclick="closeModal()">&times;</span>
+modalContent.innerHTML = `
+  <span class="close-btn" onclick="closeModal()">&times;</span>
 
-    <h2 class="modal-title">${r.name}</h2>
+  <!-- Imaginea mare sus -->
+  <div class="modal-image-wrapper">
+    <img id="modal-image" src="${r.image}" alt="${r.name}" />
+    <div class="modal-badges">
+      <span class="badge-rank ${r.rank.toLowerCase()}">${r.rank}</span>
+      <span class="category-tag">${r.category}</span>
+    </div>
+  </div>
 
-    <div class="modal-image-wrapper">
-      <img src="${r.image}" alt="${r.name}" />
-      <div class="modal-badges">
-        <span class="badge-rank ${r.rank.toLowerCase()}">${r.rank}</span>
-        <span class="category-tag">${r.category}</span>
+  <!-- Nume produs -->
+  <h3 class="modal-title">${r.name}</h3>
+
+  <!-- Coloanele: stânga / dreapta -->
+  <div class="modal-columns">
+    <!-- Coloana stângă -->
+    <div class="modal-left">
+      <div class="modal-description">
+        <h4>Descriere</h4>
+        <p>${r.description}</p>
+      </div>
+
+      <div class="modal-specs">
+        <h4>Specificații</h4>
+        <ul>
+          ${r.fullDescription
+            .split('.')
+            .filter(p => p.trim().length > 3)
+            .map(p => `<li>${p.trim()}</li>`)
+            .join('')}
+        </ul>
       </div>
     </div>
 
-    <p class="modal-description">${r.description}</p>
+    <!-- Coloana dreaptă -->
+    <div class="modal-right">
+      <div class="modal-price-box">
+        <span class="price-value">${r.price} AP ⚡</span>
+        <span class="price-label">Activity Points Required</span>
+      </div>
 
-    <h4>Specificații</h4>
-    <p class="modal-specs">${r.fullDescription}</p>
+      <div class="modal-stock">
+        <label>Stoc</label>
+        <div class="stock-bar">
+          <div class="stock-fill" style="width:${(r.stockCount / r.maxStock) * 100}%"></div>
+        </div>
+        <span class="stock-text">${r.stockCount}/${r.maxStock}</span>
+      </div>
 
-    <div class="modal-price-row">
-      <div class="price-amount">${r.price} AP ⚡</div>
+      <div class="quantity-row">
+        <label>Cantitate</label>
+        <div class="quantity-controls">
+          <button onclick="decreaseModalQty()">−</button>
+          <span id="modal-qty">1</span>
+          <button onclick="increaseModalQty()">+</button>
+        </div>
+      </div>
+
+      <button class="modal-add-btn" onclick="addToCartFromModal('${r.id}')">Adaugă în coș</button>
     </div>
+  </div>
+`;
 
-    <div class="stock-bar">
-      <div class="stock-fill" style="width:${stockPercent}%"></div>
-      <span class="stock-text">${r.stockCount}/${r.maxStock}</span>
-    </div>
 
-    <div class="quantity-row">
-      <button onclick="decreaseModalQty()">−</button>
-      <span id="modal-qty">1</span>
-      <button onclick="increaseModalQty()">+</button>
-    </div>
 
-    <button class="modal-add-btn" onclick="addToCartFromModal('${r.id}')">Adaugă în coș</button>
-  `;
 
   modal.classList.remove("hidden");
   modal.style.display = "flex";
