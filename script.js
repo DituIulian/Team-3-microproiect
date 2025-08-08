@@ -8,7 +8,7 @@ const mockRewards = [
     description: " Taste mecanice rapide și durabileTasteastaste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste e mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste  mecanice rapide și durabileTaste mecanice rapide și durabileTaste mecanice rapide și durabile",
     fullDescription: "Tastatură RGaste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste asteaste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste  mecanice rapide și durabileTaste aste mecanice rapide și durabileTaste B Mech-X cu iluminare personalizabilă și switch-uri performante.",
     price: 1200,
-    image: "assets/images/keyboard.jpg",
+    image: "assets/images/poza.png",
     inStock: true,
     stockCount: 8,
     maxStock: 10,
@@ -1037,15 +1037,17 @@ if (e.target.classList.contains("increase")) {
 
 
 function toggleUserMenu() {
-  const menu = document.getElementById("user-menu");
-  menu.classList.toggle("hidden");
+    const menu = document.getElementById("user-menu");
+    menu.classList.toggle("hidden");
 }
 
-document.addEventListener("click", (e) => {
-  const avatarWrapper = document.querySelector(".user-avatar-wrapper");
-  if (!avatarWrapper.contains(e.target)) {
-    document.getElementById("user-menu").classList.add("hidden");
-  }
+document.addEventListener("click", function (event) {
+    const pill = document.querySelector(".user-pill");
+    const menu = document.getElementById("user-menu");
+
+    if (!pill.contains(event.target)) {
+        menu.classList.add("hidden");
+    }
 });
 
 function filterFavorites() {
