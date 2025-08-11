@@ -925,6 +925,10 @@ input[type="range"] {
     box-shadow: 0px 30px 40px 0px #00000026;
 }
 
+#cart-panel.open {
+    display: block;
+}
+
 .cart-panel h2 {
     font-size: 1.2rem;
     margin-bottom: 0.8rem;
@@ -1083,7 +1087,7 @@ input[type="range"] {
 
 
 /* Mesaj cos gol */
-.cart-panel.empty-cart {
+#cart-panel.open.empty-cart {
     display: flex;
     flex-direction: column;
     align-items: center;

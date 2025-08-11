@@ -448,7 +448,32 @@ function applyFilters() {
       });
     }
 
-    const catOK  = !activeFilters.category.length || activeFilters.category.includes(item.category);
+    //De evaluat daca este mai rapid/usor de modificat din backend sau ramane asa
+ 
+    const categoryMap = {
+      "gt rank badges": ["badges", "gt rank badges"],
+      "accesorii tech & gaming": ["accesorii tech & gaming", "tech & gaming", "accesorii"],
+      "mystery box": ["mystery box", "mystery"],
+      "avatars & frames": ["avatar", "avatars", "frames", "avatars & frames"],
+      "merch gt": ["merch gt"],
+      "vouchere": ["vouchere"],
+      "experiențe": ["experiente", "experiențe"] // cu si fara diacritice 
+        };
+    
+  function normalizeText(text) {
+    return text
+      .toLowerCase()
+      .normalize("NFD")
+      .replace(/[\u0300-\u036f]/g, "");
+  }
+
+  const catOK = !activeFilters.category.length ||
+    activeFilters.category.some(filterCat => {
+      const normalizedFilter = normalizeText(filterCat);
+      const synonyms = categoryMap[normalizedFilter] || [normalizedFilter];
+      return synonyms.some(syn => normalizeText(item.category).includes(normalizeText(syn)));
+    });
+
     const rankOK = !activeFilters.rank.length || activeFilters.rank.includes(item.rank);     // // functioneaza doar din frontend
     const typeOK = !activeFilters.type.length || activeFilters.type.includes(item.type);     // // functioneaza doar din frontend
 
@@ -462,31 +487,47 @@ function applyFilters() {
 
 //  * Cart (server-driven)
 function enrichCartItems(items) {
-  // join cu rewards pentru imagine/categorie care nu vin din server
-  return (items || []).map(ci => {
-    const r = allRewards.find(x => String(x.id) === String(ci.rewardId));
-    return {
-      id: ci.rewardId,
-      name: ci.name,
-      price: ci.price,
-      quantity: ci.quantity,
-      image: r?.image || 'assets/images/poza.png',
-      category: r?.category || '',
-    };
-  });
+  // join + FILTRARE: ignorăm orice item cu quantity <= 0 (backend poate lăsa 0)
+  return (items || [])
+    .filter(ci => (ci?.quantity ?? 0) > 0)
+    .map(ci => {
+      const r = allRewards.find(x => String(x.id) === String(ci.rewardId));
+      return {
+        id: ci.rewardId,
+        name: ci.name,
+        price: ci.price,
+        quantity: ci.quantity,
+        image: r?.image || 'assets/images/poza.png',
+        category: r?.category || '',
+      };
+    });
 }
+
 
 async function refreshCartUI() {
   try {
     const data = await api.getCart();
+
+    // curățăm item-urile cu qty 0
     const items = enrichCartItems(data?.items || []);
     serverCartItems = items;
-    serverCartTotal = Number(data?.totalPoints ?? 0);
+
+    // total din backend sau fallback calculat local (dacă backend lasă 0 cu iteme prezente)
+    const backendTotal = Number(data?.totalPoints ?? 0);
+    const localTotal = items.reduce((s, it) => s + Math.round((it.price || 0) * (it.quantity || 0)), 0);
+    serverCartTotal = backendTotal || localTotal;
+
     updateCartUI();
+
+    // dacă e gol după refresh → închidem coșul
+    if (serverCartItems.length === 0) {
+      closeCart();
+    }
   } catch (e) {
     console.warn(e);
   }
 }
+
 
 async function handleBuy(rewardId, qty = 1) {
   try {
@@ -503,16 +544,36 @@ async function handleBuy(rewardId, qty = 1) {
 
 async function modifyCartQuantity(rewardId, delta) {
   try {
+    const current = serverCartItems.find(p => String(p.id) === String(rewardId));
+    if (!current) return;
+
+    // nu permitem negativ local (în caz că backend-ul nu blochează)
+    if ((current.quantity || 0) + delta < 0) return;
+
     const resp = await api.addToCart(rewardId, delta);
     if (!resp?.success) return showToast(resp?.message || 'Nu am putut actualiza coșul.');
+
+    // curățăm itemele cu qty 0 chiar dacă backend-ul le mai trimite
     serverCartItems = enrichCartItems(resp.cart?.items || []);
-    serverCartTotal = Number(resp.cart?.totalPoints ?? 0);
+
+    // total backend sau fallback
+    const backendTotal = Number(resp.cart?.totalPoints ?? 0);
+    const localTotal = serverCartItems.reduce((s, it) => s + Math.round((it.price || 0) * (it.quantity || 0)), 0);
+    serverCartTotal = backendTotal || localTotal;
+
     updateCartUI();
     displayRewards(filteredRewards.length ? filteredRewards : allRewards);
+
+    // dacă nu mai avem nimic, închidem coșul (puțin delay ca să vadă „gol”)
+    if (serverCartItems.length === 0) {
+      setTimeout(closeCart, 300);
+    }
   } catch (e) {
     showToast(e.message);
   }
 }
+
+
 
 async function checkout() {
   try {
@@ -529,7 +590,7 @@ async function checkout() {
     await refreshCartUI();
 
     showToast('Comandă finalizată! Mulțumim 🛒');
-    document.getElementById("cart-panel").style.display = "none";
+    closeCart();
   } catch (e) {
     showToast(e.message);
   }
@@ -540,7 +601,7 @@ function updateCartUI() {
   const panel = document.getElementById("cart-panel");
   list.innerHTML = "";
 
-  if (serverCartItems.length === 0) {
+    if (serverCartItems.length === 0) {
     panel.classList.add("empty-cart");
     list.innerHTML = `<div><img src="assets/icons/empty-bag.svg" alt="empty" /><p>Coșul de cumpărături este gol</p></div>`;
     document.getElementById("cart-total").textContent = "0";
@@ -553,8 +614,11 @@ function updateCartUI() {
 
     updateUserPointsDisplay();
     updateCheckoutButtonState();
+
+    closeCart();
     return;
-  } else {
+  }
+ else {
     panel.classList.remove("empty-cart");
   }
 
@@ -725,11 +789,43 @@ document.addEventListener("click", (e) => {
   }
 });
 
-document.getElementById("toggle-cart")?.addEventListener("click", e => {
-  e.stopPropagation();
-  const panel = document.getElementById("cart-panel");
-  panel.style.display = panel.style.display === "block" ? "none" : "block";
+
+// === Cart helpers (unic mod de a controla panoul) ===
+function getCartPanel() { return document.getElementById("cart-panel"); }
+function isCartOpen() { return getCartPanel()?.classList.contains("open"); }
+function openCart() {
+  const p = getCartPanel();
+  if (!p) return;
+  p.classList.add("open");
+}
+function closeCart() {
+  const p = getCartPanel();
+  if (!p) return;
+  p.classList.remove("open");
+   p.classList.remove("empty-cart"); 
+}
+function toggleCart() { isCartOpen() ? closeCart() : openCart(); }
+
+// Toggle coș + închidere la click în afară (o singură sursă a adevărului)
+document.addEventListener("click", (e) => {
+  const panel = getCartPanel();
+  const cartBtn = document.getElementById("toggle-cart");
+
+  // click pe buton → toggle și oprește propagarea
+  if (cartBtn && cartBtn.contains(e.target)) {
+    e.stopPropagation();
+    toggleCart();
+    return;
+  }
+
+  // click oriunde în afară → închide
+  if (panel && isCartOpen() && !panel.contains(e.target)) {
+    closeCart();
+  }
 });
+
+
+
 
 document.getElementById("toggleFilters")?.addEventListener("click", () =>
   document.getElementById("filter-sidebar")?.classList.toggle("active")
@@ -768,6 +864,9 @@ document.getElementById("search-input")?.addEventListener("input", e => {
 //  Initializare app(load din backend)
  
 document.addEventListener("DOMContentLoaded", async () => {
+
+  closeCart(); 
+  
   try {
     // 1) User
     currentUser = await api.getUserProfile();

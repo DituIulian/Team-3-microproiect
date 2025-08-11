@@ -27,11 +27,11 @@ public class APIService {
 
         // Initialize demo rewards
         rewards.put("reward1", new Reward("reward1", "Coffee Mug", "Premium coffee mug",
-                "High-quality ceramic coffee mug with company logo", 25.0, "/mug.jpg", "Accessories", true, 50));
+                "High-quality ceramic coffee mug with company logo", 25.0, "/mug.jpg", "Merch GT", true, 50));
         rewards.put("reward2", new Reward("reward2", "T-Shirt", "Cotton t-shirt",
-                "100% cotton t-shirt with custom design", 35.0, "/tshirt.jpg", "Clothing", true, 30));
+                "100% cotton t-shirt with custom design", 35.0, "/tshirt.jpg", "Merch GT", true, 30));
         rewards.put("reward3", new Reward("reward3", "Gift Card", "$50 Gift Card",
-                "Digital gift card for online purchases", 50.0, "/giftcard.jpg", "Digital", true, 100));
+                "Digital gift card for online purchases", 50.0, "/giftcard.jpg", "Vouchere", true, 100));
         // ===================== Demo rewards (20 items) =====================
         rewards.put("reward101", new Reward("reward101", "GT Tote Bag", "Tote bag din bumbac",
                 "Tote bag din pânză de bumbac, printat cu logo-ul GT, perfect pentru cursuri sau cumpărături.",
