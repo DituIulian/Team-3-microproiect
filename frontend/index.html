@@ -12,7 +12,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
     <link rel="stylesheet" href="style.css" />
+    <script>
+     // PORT din tomcat dupa start proiect
+     window.API_BASE = 'http://' + (location.hostname || 'localhost') + ':55521/api';
+     </script>  
     <script src="script.js" defer></script>
+
 </head>
 
 <body>

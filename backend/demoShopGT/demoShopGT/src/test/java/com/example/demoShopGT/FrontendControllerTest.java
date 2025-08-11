@@ -48,7 +48,7 @@ class FrontendControllerTest {
                 .andExpect(jsonPath("$.name").value("Test User"))
                 .andExpect(jsonPath("$.avatar").value("/avatar.jpg"))
                 .andExpect(jsonPath("$.activityPoints").value(100));
-        
+
         System.out.println("✅ GET /api/user/profile endpoint test passed");
     }
 
@@ -57,8 +57,8 @@ class FrontendControllerTest {
     void testGetRewards() throws Exception {
         // Given
         List<Reward> mockRewards = Arrays.asList(
-            new Reward("reward1", "Test Reward", "Description", "Full desc", 25.0, "/img.jpg", "Category", true, 10)
-        );
+                new Reward("reward1", "Test Reward", "Description", "Full desc", 25.0, "/img.jpg", "Category", true,
+                        10));
         when(apiService.getRewards()).thenReturn(mockRewards);
 
         // When & Then
@@ -71,7 +71,7 @@ class FrontendControllerTest {
                 .andExpect(jsonPath("$.rewards[0].price").value(25.0))
                 .andExpect(jsonPath("$.rewards[0].inStock").value(true))
                 .andExpect(jsonPath("$.rewards[0].stockCount").value(10));
-        
+
         System.out.println("✅ GET /api/rewards endpoint test passed");
     }
 
@@ -81,9 +81,8 @@ class FrontendControllerTest {
         // Given
         AddToCartRequest request = new AddToCartRequest("reward1", 2);
         CartResponse cartResponse = new CartResponse(
-            Arrays.asList(new CartItem("reward1", "Test Item", 25.0, 2)), 
-            50.0
-        );
+                Arrays.asList(new CartItem("reward1", "Test Item", 25.0, 2)),
+                50.0);
         AddToCartResponse mockResponse = new AddToCartResponse(true, "Item added successfully", cartResponse);
         when(apiService.addToCart(any(AddToCartRequest.class))).thenReturn(mockResponse);
 
@@ -96,7 +95,7 @@ class FrontendControllerTest {
                 .andExpect(jsonPath("$.message").value("Item added successfully"))
                 .andExpect(jsonPath("$.cart.items").isArray())
                 .andExpect(jsonPath("$.cart.totalPoints").value(50.0));
-        
+
         System.out.println("✅ POST /api/cart/add endpoint test passed");
     }
 
@@ -105,9 +104,8 @@ class FrontendControllerTest {
     void testGetCart() throws Exception {
         // Given
         CartResponse mockCart = new CartResponse(
-            Arrays.asList(new CartItem("reward1", "Test Item", 25.0, 1)), 
-            25.0
-        );
+                Arrays.asList(new CartItem("reward1", "Test Item", 25.0, 1)),
+                25.0);
         when(apiService.getCart(anyString())).thenReturn(mockCart);
 
         // When & Then
@@ -117,7 +115,7 @@ class FrontendControllerTest {
                 .andExpect(jsonPath("$.totalPoints").value(25.0))
                 .andExpect(jsonPath("$.items[0].rewardId").value("reward1"))
                 .andExpect(jsonPath("$.items[0].name").value("Test Item"));
-        
+
         System.out.println("✅ GET /api/cart endpoint test passed");
     }
 
@@ -127,14 +125,13 @@ class FrontendControllerTest {
         // Given
         CheckoutRequest request = new CheckoutRequest();
         request.setItems(Arrays.asList(new CartItem("reward1", "Test Item", 25.0, 1)));
-        
+
         CheckoutResponse mockResponse = new CheckoutResponse(
-            true, 
-            "Order placed successfully", 
-            125.0, 
-            Arrays.asList(new CartItem("reward1", "Test Item", 25.0, 1)),
-            "TXN-123456"
-        );
+                true,
+                "Order placed successfully",
+                125.0,
+                Arrays.asList(new CartItem("reward1", "Test Item", 25.0, 1)),
+                "TXN-123456");
         when(apiService.checkout(any(CheckoutRequest.class))).thenReturn(mockResponse);
 
         // When & Then
@@ -146,7 +143,7 @@ class FrontendControllerTest {
                 .andExpect(jsonPath("$.message").value("Order placed successfully"))
                 .andExpect(jsonPath("$.newBalance").value(125.0))
                 .andExpect(jsonPath("$.purchasedItems").isArray());
-        
+
         System.out.println("✅ POST /api/checkout endpoint test passed");
     }
 
@@ -155,8 +152,7 @@ class FrontendControllerTest {
     void testGetPurchaseHistory() throws Exception {
         // Given
         List<PurchaseHistoryItem> mockHistory = Arrays.asList(
-            new PurchaseHistoryItem("TXN-1", "Test Item", 25, "2024-01-01T10:00:00", "completed")
-        );
+                new PurchaseHistoryItem("TXN-1", "Test Item", 25, "2024-01-01T10:00:00", "completed"));
         when(apiService.getPurchaseHistory(anyString())).thenReturn(mockHistory);
 
         // When & Then
@@ -168,7 +164,7 @@ class FrontendControllerTest {
                 .andExpect(jsonPath("$.purchases[0].rewardName").value("Test Item"))
                 .andExpect(jsonPath("$.purchases[0].pointsSpent").value(25))
                 .andExpect(jsonPath("$.purchases[0].status").value("completed"));
-        
+
         System.out.println("✅ GET /api/user/history endpoint test passed");
     }
 }

@@ -1511,3 +1511,112 @@ input[type="range"] {
     animation: flip-heart 0.4s ease-in-out;
     backface-visibility: hidden;
 }
+
+
+/* === Overrides stabile (plasat la FINALUL style.css) === */
+.header-container {
+    flex-direction: row;
+    gap: 2rem;
+}
+
+.header-right {
+    flex-direction: row;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 0.8rem;
+    flex-wrap: nowrap;
+}
+
+.header-center input {
+    max-width: 400px;
+    color: #fff;
+}
+
+.gt-logo {
+    height: 48px;
+}
+
+.badge-rank {
+    font-size: 0.7rem;
+    padding: 4px 12px;
+}
+
+.progress-bar {
+    height: 4px;
+}
+
+.user-name {
+    display: flex;
+}
+
+.card-actions button:first-child {
+    border: 1px solid #fff;
+}
+
+.card-actions button:last-child {
+    background: #ff005c;
+}
+
+.card-actions button:last-child:hover:not(:disabled) {
+    background: #ff3377;
+}
+
+.user-pill {
+    background: rgba(100, 85, 255, 0.15);
+    border: 1px solid #7a5cff;
+    padding: 0.4rem 0.8rem;
+}
+
+/* panel & sidebar – variantă consecventă */
+.shop-sidebar {
+    width: 280px;
+}
+
+.footer-bottom .footer-rights {
+    gap: 0.8rem;
+}
+
+/* utilitare: ne asigurăm că există */
+.hidden {
+    display: none !important;
+}
+
+/* fallback pentru imaginile din card (contează când venim din backend) */
+.img-wrapper {
+    height: 160px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    border-radius: 12px;
+    background: rgba(255, 255, 255, 0.04);
+}
+
+.img-wrapper img {
+    max-height: 100%;
+    object-fit: contain;
+}
+
+/* asigurăm overlay-ul modalului (dacă e nevoie) */
+.modal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    z-index: 9999;
+    background: rgba(0, 0, 0, 0.6);
+    align-items: center;
+    justify-content: center;
+}
+
+.modal:not(.hidden) {
+    display: flex;
+}
+
+/* butonul de favorite să fie clickabil și la overlay */
+.favorite-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    z-index: 2;
+    cursor: pointer;
+}
