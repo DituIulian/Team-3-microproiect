@@ -95,23 +95,15 @@ public class Reward {
 	public void setStockCount(int stockCount) {
 		this.stockCount = stockCount;
 	}
-
-
 	public RewardType getType() {
 		return type;
 	}
-
-
 	public void setType(RewardType type) {
 		this.type = type;
 	}
-
-
 	public RewardRank getRank() {
 		return rank;
 	}
-
-
 	public void setRank(RewardRank rank) {
 		this.rank = rank;
 	}
