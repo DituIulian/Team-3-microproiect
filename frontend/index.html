@@ -14,7 +14,7 @@
     <link rel="stylesheet" href="style.css" />
     <script>
      // PORT din tomcat dupa start proiect
-     window.API_BASE = 'http://' + (location.hostname || 'localhost') + ':63850/api';
+     window.API_BASE = 'http://' + (location.hostname || 'localhost') + ':51934/api';
      </script>  
     <script src="script.js" defer></script>
 
@@ -51,28 +51,32 @@
 
 
             <div class="user-points">9400 AP ⚡</div>
-            <div class="user-pill" onclick="toggleUserMenu()">
-                <div class="user-name" id="user-name">Claudia N.</div>
-                <div class="user-avatar-wrapper">
-                    <div class="user-avatar">
-                        <img src="assets/images/avatar-placeholder.png" alt="Avatar utilizator" />
-                    </div>
-                </div>
             
-                <!-- Dropdown-ul -->
-                <ul class="user-menu hidden" id="user-menu">
-                    <li onclick="openProfeile()">👤 Profilul meu</li>
-                    <li onclick="openHistory()">🧍 Istoricul meu</li>
-                    <li onclick="openPoints()">⚡ Punctele mele</li>
-                    <li onclick="openNotifications()">🔔 Setări notificări</li>
-                    <li onclick="filterFavorites()" id="btn-favorite-view">💜 Favoritele mele</li>
-                    <li onclick="logout()">🚪 Log Out</li>
-                </ul>
-            </div>
+        <!-- User area -->
+        <div class="user-area">
+            <button class="user-pill" id="user-pill" type="button" aria-haspopup="true" aria-expanded="false">
+                <div class="user-avatar">
+                    <img id="user-avatar-img" src="assets/images/avatar.jpg" alt="Avatar utilizator" />
+                </div>
+                <div class="user-name" id="user-name">Claudia N.</div>
+                <i class="chevron fa-solid fa-chevron-down" aria-hidden="true"></i>
+            </button>
+        
+            <!-- Dropdown -->
+            <ul class="user-menu hidden" id="user-menu" role="menu" aria-labelledby="user-pill">
+                <li class="user-menu-identity mobile-only">👋 Salut, <strong id="user-name-mobile">Claudia N.</strong></li>
+                <li onclick="openProfeile()">👤 Profilul meu</li>
+                <li onclick="openHistory()">🧍 Istoricul meu</li>
+                <li onclick="openPoints()">⚡ Punctele mele</li>
+                <li onclick="openNotifications()">🔔 Setări notificări</li>
+                <li onclick="filterFavorites()" id="btn-favorite-view">💜 Favoritele mele</li>
+                <li onclick="logout()">🚪 Log Out</li>
+            </ul>
+        </div>
 
 
         <div class="cart-wrapper">
-            <img src="assets/icons/shopping-bag icon.png" alt="Cart" class="cart-icon" id="toggle-cart" />
+            <img src="/frontend/assets/icons/shopping-bag-icon.png" alt="Cart" class="cart-icon" id="toggle-cart" />
             <span class="cart-badge" id="cart-badge">1</span>
         </div>
         </div>
@@ -84,6 +88,8 @@
 
     <!-- main -->
     <main class="shop-main">
+
+       
         <!-- Sidebar de filtre -->
         <aside class="shop-sidebar" id="filter-sidebar">
             <button id="close-filters" class="close-btn-mobile">✖</button>
@@ -171,7 +177,7 @@
                 </div>
             </div>
         </aside>
-
+  
         <!-- Produse -->
 
         <section class="rewards-grid" id="rewards-container"></section>
@@ -191,23 +197,28 @@
     <!-- Modal -->
     <div id="product-modal" class="modal hidden">
     <div class="modal-content"></div>
+    </div>
 
+    <!-- History Modal -->
+    <div id="history-modal" class="modal hidden">
+        <div class="modal-content history-content">
+        </div>
     </div>
 
 <footer class="main-footer">
     <div class="footer-columns">
         <!-- Logo + descriere -->
         <div class="footer-column">
-            <img src="assets/images/logo.png" alt="Generatia Tech" class="footer-logo" />
+            <img src="/frontend/assets/images/logo.png" alt="Generatia Tech" class="footer-logo" />
             <p class="footer-description">
                 Evoluează-ți parcursul cu recompense exclusive și deblochează realizări legendare în comunitatea noastră
                 de învățare.
             </p>
             <div class="footer-socials">
                 <!-- De introdus link-uri si imagini -->
-                <a href="#"><img src="assets/icons/facebook.png" alt="Facebook"></a>
-                <a href="#"><img src="assets/icons/instagram.png" alt="Instagram"></a>
-                <a href="#"><img src="assets/icons/tiktok.png" alt="TikTok"></a>
+                <a href="#"><img src="/frontend/assets/icons/facebook.png" alt="Facebook"></a>
+                <a href="#"><img src="/frontend/assets/icons/instagram.png" alt="Instagram"></a>
+                <a href="#"><img src="/frontend/assets/icons/tiktok.png" alt="TikTok"></a>
             </div>
         </div>
 
