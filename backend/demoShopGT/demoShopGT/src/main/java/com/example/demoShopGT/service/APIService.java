@@ -22,151 +22,152 @@ public class APIService {
 
         private void initializeDemoData() {
                 // Initialize demo user
-                UserProfile demoUser = new UserProfile("user1", "Demo User", "/avatar.jpg", 150);
+                UserProfile demoUser = new UserProfile("user1", "Demo User", "/avatar.jpg", 1450);
                 users.put("user1", demoUser);
 
                 // Initialize demo rewards
                 rewards.put("reward1", new Reward("reward1", "Coffee Mug", "Premium coffee mug",
                                 "High-quality ceramic coffee mug with company logo", 25.0, "/mug.jpg", "Merch GT", true,
-                                50, null, null));
+                                50, RewardType.POPULAR, RewardRank.SILVER));
+
                 rewards.put("reward2", new Reward("reward2", "T-Shirt", "Cotton t-shirt",
                                 "100% cotton t-shirt with custom design", 35.0, "/tshirt.jpg", "Merch GT", true, 30,
-                                null, null));
+                                RewardType.POPULAR, RewardRank.SILVER));
+
                 rewards.put("reward3", new Reward("reward3", "Gift Card", "$50 Gift Card",
                                 "Digital gift card for online purchases", 50.0, "/giftcard.jpg", "Vouchere", true, 100,
-                                null, null));
-                // ===================== Demo rewards (20 items) =====================
+                                RewardType.POPULAR, RewardRank.GOLD));
                 rewards.put("reward101", new Reward("reward101", "GT Tote Bag", "Tote bag din bumbac",
                                 "Tote bag din pânză de bumbac, printat cu logo-ul GT, perfect pentru cursuri sau cumpărături.",
                                 30.0,
                                 "https://images.unsplash.com/photo-1544551763-7ef0468b1dc6?q=80&w=1000&auto=format&fit=crop",
-                                "Merch GT", true, 80, null, null));
+                                "Merch GT", true, 80, RewardType.POPULAR, RewardRank.SILVER));
 
                 rewards.put("reward102", new Reward("reward102", "Insignă Email", "Set de 3 insigne",
                                 "Set de 3 insigne metalice cu iconițe tematice (email, cod, rachetă). Prindere sigură, finisaj lucios.",
                                 20.0,
                                 "https://images.unsplash.com/photo-1516387938699-a93567ec168e?q=80&w=1000&auto=format&fit=crop",
-                                "Merch GT", true, 120, null, null));
+                                "Merch GT", true, 120, RewardType.POPULAR, RewardRank.SILVER));
 
                 rewards.put("reward103", new Reward("reward103", "Cana GT", "Cană ceramică 350ml",
                                 "Cană ceramică de calitate (350ml) cu logo GT, compatibilă cu mașina de spălat vase.",
                                 25.0,
                                 "https://images.unsplash.com/photo-1498804103079-a6351b050096?q=80&w=1000&auto=format&fit=crop",
-                                "Merch GT", true, 100, null, null));
+                                "Merch GT", true, 100, RewardType.POPULAR, RewardRank.SILVER));
 
                 rewards.put("reward104", new Reward("reward104", "Agenda Punctată", "Agenda A5 dot-grid",
                                 "Agenda A5 cu hârtie punctată, copertă soft-touch și semn de pagină. Ideală pentru notițe și schetch-uri.",
                                 32.0,
                                 "https://images.unsplash.com/photo-1515378791036-0648a3ef77b2?q=80&w=1000&auto=format&fit=crop",
-                                "Merch GT", true, 70, null, null));
+                                "Merch GT", true, 70, RewardType.POPULAR, RewardRank.SILVER));
 
                 rewards.put("reward105", new Reward("reward105", "Sticker Pack GT", "Pachet 10 stickere",
                                 "Pachet cu 10 stickere rezistente la apă: GT logo, cod, cloud, tastatură, monitor.",
                                 12.0,
                                 "https://images.unsplash.com/photo-1510017803434-a899398421b1?q=80&w=1000&auto=format&fit=crop",
-                                "Merch GT", true, 200, null, null));
+                                "Merch GT", true, 200, RewardType.POPULAR, RewardRank.SILVER));
 
                 rewards.put("reward106", new Reward("reward106", "Voucher Emag 50 RON", "Voucher eMAG 50 RON",
                                 "Voucher digital în valoare de 50 RON utilizabil pe eMAG. Termeni și condiții pot varia.",
                                 120.0,
                                 "https://images.unsplash.com/photo-1563013544-824ae1b704d3?q=80&w=1000&auto=format&fit=crop",
-                                "Vouchere", true, 40, null, null));
+                                "Vouchere", true, 40, RewardType.POPULAR, RewardRank.GOLD));
 
                 rewards.put("reward107", new Reward("reward107", "Voucher Steam 10€", "Voucher jocuri PC",
                                 "Card digital Steam în valoare de 10€ pentru jocurile sau DLC-urile preferate.",
                                 200.0,
                                 "https://images.unsplash.com/photo-1542751110-97427bbecf20?q=80&w=1000&auto=format&fit=crop",
-                                "Vouchere", true, 30, null, null));
+                                "Vouchere", true, 30, RewardType.POPULAR, RewardRank.GOLD));
 
                 rewards.put("reward108", new Reward("reward108", "Reducere 10% (3 inimi)", "Reducere bundle",
                                 "Reducere de 10% la checkout pentru coșuri cu minim 3 produse, valabil pentru utilizatorii cu 3 inimi.",
                                 0.0,
                                 "https://images.unsplash.com/photo-1601831410465-233af5250160?q=80&w=1000&auto=format&fit=crop",
-                                "Badges", true, 999, null, null)); // e un perk, preț 0 (validare se face la checkout)
+                                "Badges", true, 999, RewardType.RARE, RewardRank.SILVER)); // perk, dar îl facem RARE
 
                 rewards.put("reward109", new Reward("reward109", "Avatar: Pisică Coder", "Avatar colecționabil",
                                 "Avatar colecționabil cu tematică „Pisică Coder” – fișier PNG transparent, rezoluție 1024x1024.",
                                 40.0,
                                 "https://images.unsplash.com/photo-1592194996308-7b43878e84a6?q=80&w=1000&auto=format&fit=crop",
-                                "Avatar", true, 90, null, null));
+                                "Avatar", true, 90, RewardType.POPULAR, RewardRank.SILVER));
 
                 rewards.put("reward110", new Reward("reward110", "Avatar: Mașină Retro", "Avatar colecționabil",
                                 "Avatar colecționabil cu tematică „Retro Car” – fișier PNG transparent, rezoluție 1024x1024.",
                                 40.0,
                                 "https://images.unsplash.com/photo-1520975916090-3105956dac38?q=80&w=1000&auto=format&fit=crop",
-                                "Avatar", true, 90, null, null));
+                                "Avatar", true, 90, RewardType.POPULAR, RewardRank.SILVER));
 
                 rewards.put("reward111", new Reward("reward111", "Frame Neon", "Ramă profil neon",
                                 "Ramă neon pentru avatarul tău din profilul GT – stil cyberpunk, export SVG/PNG.",
                                 28.0,
                                 "https://images.unsplash.com/photo-1520975922533-6a37d1b1b91b?q=80&w=1000&auto=format&fit=crop",
-                                "Avatar", true, 110, null, null));
+                                "Avatar", true, 110, RewardType.POPULAR, RewardRank.SILVER));
 
                 rewards.put("reward112", new Reward("reward112", "Mouse GT", "Mouse optic 6D",
                                 "Mouse optic cu 6 butoane programabile, DPI ajustabil, cablu împletit. Ideal pentru taskuri și gaming casual.",
                                 320.0,
                                 "https://images.unsplash.com/photo-1587202372775-98927b0d4f93?q=80&w=1000&auto=format&fit=crop",
-                                "Tech & Gaming", true, 25, null, null));
+                                "Tech & Gaming", true, 25, RewardType.POPULAR, RewardRank.GOLD));
 
                 rewards.put("reward113", new Reward("reward113", "Tastatură Mecanică", "Tastatură RGB",
                                 "Tastatură mecanică compactă 60% cu iluminare RGB, switch-uri tactile și keycaps PBT.",
                                 520.0,
                                 "https://images.unsplash.com/photo-1518441902117-f26c0b08e36a?q=80&w=1000&auto=format&fit=crop",
-                                "Tech & Gaming", true, 15, null, null));
+                                "Tech & Gaming", true, 15, RewardType.LEGENDARY, RewardRank.DIAMOND));
 
                 rewards.put("reward114", new Reward("reward114", "Căști BT Over-ear", "Căști Bluetooth",
                                 "Căști Bluetooth over-ear cu anulare pasivă a zgomotului, autonomie 30h, microfon pentru call-uri.",
                                 450.0,
                                 "https://images.unsplash.com/photo-1518443882834-96f8c3a0f7f2?q=80&w=1000&auto=format&fit=crop",
-                                "Tech & Gaming", true, 20, null, null));
+                                "Tech & Gaming", true, 20, RewardType.LEGENDARY, RewardRank.DIAMOND));
 
                 rewards.put("reward115", new Reward("reward115", "Mystery Box – Silver", "Cutie surpriză",
                                 "Mystery Box nivel Silver: șanse mari la merch (tote bag, tricou), șanse medii la avatar/frame, șanse mici la voucher redus.",
                                 60.0,
                                 "https://images.unsplash.com/photo-1596492784531-6e6eb5ea9992?q=80&w=1000&auto=format&fit=crop",
-                                "Mystery", true, 100, null, null));
+                                "Mystery", true, 100, RewardType.RARE, RewardRank.SILVER));
 
                 rewards.put("reward116", new Reward("reward116", "Mystery Box – Gold", "Cutie surpriză",
                                 "Mystery Box nivel Gold: șanse la voucher Steam, reducere bundle, avatar exclusiv sau 2x puncte pentru următoarea acțiune.",
                                 180.0,
                                 "https://images.unsplash.com/photo-1484480974693-6ca0a78fb36b?q=80&w=1000&auto=format&fit=crop",
-                                "Mystery", true, 60, null, null));
+                                "Mystery", true, 60, RewardType.RARE, RewardRank.GOLD));
 
                 rewards.put("reward117", new Reward("reward117", "Sesiune 1:1 Interviu", "Simulare interviu",
                                 "Sesiune 1:1 de 45 minute pentru simulare de interviu (HR/tehnic) cu mentor sau recruiter; feedback personalizat.",
                                 600.0,
                                 "https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop",
-                                "Experiențe", true, 10, null, null));
+                                "Experiențe", true, 10, RewardType.LEGENDARY, RewardRank.DIAMOND));
 
                 rewards.put("reward118", new Reward("reward118", "Zi cu Echipa Staff", "Experiență Legend",
                                 "Experiență de o zi alături de echipa staff: shadowing, QA, mini-workshop. Sloturi foarte limitate.",
                                 1000.0,
                                 "https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=1000&auto=format&fit=crop",
-                                "Experiențe", true, 3, null, null));
+                                "Experiențe", true, 3, RewardType.LEGENDARY, RewardRank.LEGEND));
 
                 rewards.put("reward119", new Reward("reward119", "Badge – GT Rank GOLD", "Badge progres",
                                 "Badge digital GT Rank GOLD: afișat în profil, deblochează accesul la anumite zone și evenimente tematice.",
                                 0.0,
                                 "https://images.unsplash.com/photo-1606326608606-aa0b62935f2b?q=80&w=1000&auto=format&fit=crop",
-                                "Badges", true, 999, null, null));
+                                "Badges", true, 999, RewardType.POPULAR, RewardRank.GOLD));
 
                 rewards.put("reward120", new Reward("reward120", "Badge – GT Rank DIAMOND", "Badge progres",
                                 "Badge digital GT Rank DIAMOND: afișat în profil, oferă acces la evenimente premium (în stoc limitat).",
                                 0.0,
                                 "https://images.unsplash.com/photo-1545235617-9465d2a55698?q=80&w=1000&auto=format&fit=crop",
-                                "Badges", true, 999, null, null));
+                                "Badges", true, 999, RewardType.RARE, RewardRank.DIAMOND));
 
                 rewards.put("reward121", new Reward("reward121", "Tricou GT", "Tricou din bumbac 100%",
                                 "Tricou din bumbac 100% cu design GT – unisex, croi regular, disponibil în mai multe mărimi.",
                                 35.0,
                                 "https://images.unsplash.com/photo-1520975693416-35a1cb65bd4e?q=80&w=1000&auto=format&fit=crop",
-                                "Merch GT", true, 60, null, null));
+                                "Merch GT", true, 60, RewardType.POPULAR, RewardRank.SILVER));
 
                 rewards.put("reward122", new Reward("reward122", "Carnețel Spirală", "Notepad A6",
                                 "Notepad A6 cu spirală, hârtie de 90g, 80 file. Ușor de purtat în ghiozdan sau buzunar.",
                                 18.0,
                                 "https://images.unsplash.com/photo-1515879218367-8466d910aaa4?q=80&w=1000&auto=format&fit=crop",
-                                "Merch GT", true, 140, null, null));
+                                "Merch GT", true, 140, RewardType.POPULAR, RewardRank.SILVER));
 
                 // Initialize empty cart and history for demo user
                 userCarts.put("user1", new ArrayList<>());

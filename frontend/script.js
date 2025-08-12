@@ -73,10 +73,12 @@ let serverCartItems = [];
 let serverCartTotal = 0;          
 
 
+
+
 //  Rank & progress (doar frontend momentan)
-// !!! BACKEND nu trimite rank/saptamani
+// !!! BACKEND nu trimite rankul utilizatorului si nr saptamani
 // // functioneaza doar din frontend
-const currentWeek = 5;
+const currentWeek = 12;
 const rankInfo = getUserRankByWeek(currentWeek);
 const progress = getWeekProgress(currentWeek, rankInfo.weekStart, rankInfo.weekEnd);
 
@@ -124,27 +126,29 @@ function displayRewards(rewards) {
 
     // !!! BACKEND nu trimite rank pe reward; toate considered „Unranked”.
     // // functioneaza doar din frontend
-    const userRankOrder = ["Unranked", "Silver", "Gold", "Diamond", "Legend"];
-    const userRankIndex = userRankOrder.indexOf(rankInfo.rank);
-    const rewardRank = reward.rank || "Unranked";
-    const rewardRankIndex = userRankOrder.indexOf(rewardRank);
-    const hasAccess = userRankIndex >= rewardRankIndex;
+    // --- Rank gating (replace this whole block) ---
+    const userRankEnum = getCurrentUserRankEnum();
+    const rewardRankEnum = reward.rankEnum || toRankEnum(reward.rank || reward.itemRank || reward.requiredRank || 'SILVER');
+    const hasAccess = isUnlocked(userRankEnum, rewardRankEnum);
 
     let actionHTML = '';
     if (reward.inStock === false || (reward.stockCount ?? 0) === 0) {
       actionHTML = `<button class="out-of-stock-btn" disabled>Stoc epuizat</button>`;
     } else if (!hasAccess) {
-      // // functioneaza doar din frontend (rank gating la reward)
-      actionHTML = `<button class="out-of-stock-btn" disabled title="Deblochează rank ${rewardRank}">🔒 Indisponibil</button>`;
+      actionHTML = `<button class="out-of-stock-btn" disabled title="Deblochează rank ${rankLabel(rewardRankEnum)}">🔒 Indisponibil</button>`;
     } else {
       actionHTML = `
         <button onclick="openModal('${reward.id}')">Vezi detalii</button>
-        <button 
-          onclick="handleBuy('${reward.id}')"
+        <button
+          data-id="${reward.id}"
+          data-rank="${rewardRankEnum}"
+          class="buy-btn"
           ${getAvailablePoint() < reward.price ? 'disabled title="AP insuficient"' : ''}
+          onclick="handleBuy('${reward.id}')"
         >Cumpără cu AP</button>
       `;
     }
+
 
     // stoc: backend nu trimite maxStock -> folosim fallback
     const maxStock = (reward.maxStock ?? reward.stockMax ?? Math.max(Number(reward.stockCount || 0), 10));
@@ -168,7 +172,7 @@ function displayRewards(rewards) {
 
       <div class="price-rank-row">
         <div class="price-cost ${getAvailablePoint() < reward.price ? 'not-enough' : ''}">${Math.round(reward.price)} AP ⚡</div>
-        <span class="badge-rank ${(rewardRank || '').toLowerCase()}">${rewardRank}</span>
+        <span class="badge-rank ${rankLabel(rewardRankEnum).toLowerCase()}">${rankLabel(rewardRankEnum)}</span>
       </div>
 
       <div class="stock-bar">
@@ -929,6 +933,15 @@ document.addEventListener("DOMContentLoaded", async () => {
     setupPriceSliderIfNeeded();
     displayRewards(filteredRewards);
 
+    // Normalize rank/type coming from backend (or fill defaults)
+    allRewards = allRewards.map(r => ({
+      ...r,
+      rankEnum: toRankEnum(r.rank || r.itemRank || r.requiredRank || 'SILVER'), // suportă câmpuri alternative
+      rank: rankLabel(toRankEnum(r.rank || r.itemRank || r.requiredRank || 'SILVER')), // păstrăm și label pt UI
+    }));
+
+        filteredRewards = [...allRewards];
+        
     // 3) Coș
     await refreshCartUI();
   } catch (err) {
@@ -1134,3 +1147,37 @@ img.onerror = () => {
   }
   img.src = DEFAULT_AVATAR;
 };
+
+// --- Rank helpers (ONE SOURCE OF TRUTH) ---
+const RewardRank = { SILVER: 'SILVER', GOLD: 'GOLD', DIAMOND: 'DIAMOND', LEGEND: 'LEGEND' };
+const RankLevel  = { SILVER: 1, GOLD: 2, DIAMOND: 3, LEGEND: 4 };
+
+// Normalize anything like "silver", "Silver", "SILVER" to enum "SILVER"
+function toRankEnum(v, fallback = 'SILVER') {
+  if (!v) return fallback;
+  const s = String(v).trim().toUpperCase();
+  if (s === 'SILVER' || s === 'GOLD' || s === 'DIAMOND' || s === 'LEGEND') return s;
+  // handle "Unranked"
+  if (s === 'UNRANKED') return fallback;
+  return fallback;
+}
+
+// For UI label (Română/Title Case)
+function rankLabel(enumVal) {
+  const map = { SILVER: 'Silver', GOLD: 'Gold', DIAMOND: 'Diamond', LEGEND: 'Legend' };
+  return map[enumVal] || 'Silver';
+}
+
+// Compare userRank vs itemRank using numeric levels
+function isUnlocked(userRankEnum, itemRankEnum) {
+  const u = RankLevel[toRankEnum(userRankEnum)] ?? 0;
+  const r = RankLevel[toRankEnum(itemRankEnum)] ?? 1; // treat missing as SILVER
+  return u >= r;
+}
+
+// Derive current user's rank ENUM from your "rankInfo" object (which holds labels)
+function getCurrentUserRankEnum() {
+  return toRankEnum(rankInfo?.rank); // rankInfo.rank e "Gold", "Diamond", etc.
+}
+
+

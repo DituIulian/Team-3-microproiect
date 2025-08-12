@@ -409,12 +409,122 @@ input[type="range"] {
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* desktop: show name in pill; mobile: hide from pill and show at top of dropdown */
+/* ====== MOBILE COMPACT HEADER (doar <= 768px) ====== */
+/* ===== Mobile header compact ===== */
 @media (max-width: 768px) {
+
+    /* aranjare dreapta stabilă */
+    .header-right {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+        gap: .75rem;
+        flex-wrap: wrap;
+        min-width: 0;
+    }
+
+    .header-right>* {
+        position: static !important;
+        flex: 0 0 auto;
+        min-width: 0;
+    }
+
+    /* ascunde label-ul si saptamanile/progresul */
+    .user-rank {
+        display: flex;
+        align-items: center;
+        margin-right: .25rem;
+    }
+
+    .rank-header {
+        display: flex;
+        align-items: center;
+        gap: 0;
+    }
+
+    .user-rank .rank-label,
+    .user-rank .rank-info,
+    .user-rank .rank-progress {
+        display: none !important;
+    }
+
+    /* păstrează DOAR badge-ul (GOLD/…) mic */
+    .user-rank .badge-rank {
+        max-width: none;
+        line-height: 1.1;
+        margin-right: .375rem;
+        padding: 3px 10px;
+    }
+
+    /* AP mai compact */
+    .user-points {
+        display: inline-flex;
+        align-items: center;
+        position: static !important;
+        white-space: nowrap;
+        margin-bottom: 4px;
+    }
+
+    /* user pill compact */
+    .user-pill {
+        display: flex;
+        align-items: center;
+        gap: .5rem;
+        padding: 4px 8px;
+        border-width: 1px;
+        max-width: 140px;
+        overflow: hidden;
+        position: relative;
+        z-index: 2001;
+        /* stă peste restul */
+    }
 
     .user-pill .user-name,
     .user-pill .chevron {
         display: none;
+    }
+
+    .user-pill .user-avatar {
+        width: 34px;
+        height: 34px;
+        border-radius: 50%;
+    }
+
+    .user-avatar img,
+    .user-pill img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    /* coș mic, fix */
+    .cart-wrapper {
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0;
+        padding: 0;
+        position: relative;
+        z-index: 2000;
+    }
+
+    .cart-wrapper .cart-icon {
+        width: 28px;
+        height: 28px;
+        display: block;
+    }
+
+    /* search bar rămâne full width pe rândul lui */
+    .header-center {
+        width: 100%;
+    }
+
+    .header-center input {
+        width: 100%;
+        max-width: none;
+        min-width: 0;
     }
 
     .user-menu-identity {
@@ -427,6 +537,48 @@ input[type="range"] {
         display: none;
     }
 }
+
+@media (max-width: 480px) {
+
+    /* Mută AP puțin mai în dreapta față de GOLD */
+    .user-rank .badge-rank {
+        margin-right: .5rem;
+        /* mai mult spațiu între badge și AP */
+        font-size: .65rem;
+        /* ușor mai mic badge-ul */
+        padding: 3px 7px;
+        /* și padding redus */
+        min-width: 1.5rem;
+    }
+
+    /* AP rămâne clar separat și centrat vertical */
+    .user-points {
+        font-size: .9rem;
+        display: inline-flex;
+        align-items: center;
+    }
+
+    /* Asigură-te că header-right are spațiu suficient */
+    .header-right {
+        gap: .6rem;
+    }
+}
+
+@media (max-width: 400px) {
+        /* pune distanța pe .user-rank, nu pe .badge-rank */
+            .user-rank {
+                margin-inline-end: 12vw !important;
+                /* echivalent cu margin-right în LTR */
+            }
+        
+            /* și asigură că AP nu e poziționat ciudat */
+            .user-points {
+                position: static !important;
+                margin: 0;
+                white-space: nowrap;
+            }
+        }
+
 
 
 
@@ -1378,18 +1530,26 @@ input[type="range"] {
 }
 
 @media screen and (max-width: 992px) {
-    .main-header {
-            padding: 1rem;
-        }
+        .main-header {
+                padding: 1rem;
+            }
     
-        .header-container {
-            display: flex;
-            flex-direction: column;
+           .header-container {
+            display: grid;
+            grid-template-columns: auto 1fr auto;
+            /* left | spacer | right cluster */
+            grid-template-rows: auto auto;
+            /* row 1 = logo + right, row 2 = search */
+            grid-template-areas:
+                "left . right"
+                "search search search";
+            align-items: center;
+            gap: 12px;
             width: 100%;
-            gap: 1rem;
-        }
+           }
     
         .header-left {
+            grid-area: left;
             display: flex;
             justify-content: flex-start;
             align-items: center;
@@ -1407,6 +1567,7 @@ input[type="range"] {
             align-items: center;
             justify-content: space-between;
             width: 100%;
+            grid-area: right;
         }
     
         .user-rank {
@@ -1422,16 +1583,23 @@ input[type="range"] {
             align-items: center;
             gap: 0.4rem;
         }
+
+        .user-points{
+            margin-bottom: 4px;
+                }
     
         .user-name {
             font-size: 0.9rem;
             font-weight: bold;
             white-space: nowrap;
+            grid-area: search;
+            width: 100%;
         }
     
         .header-center {
             width: 100%;
             order: 3;
+            grid-area: search;
         }
     
         .header-center input {
@@ -1442,6 +1610,8 @@ input[type="range"] {
             background-color: #320059;
             color: white;
             border: none;
+            min-width: 0;
+            max-width: none;
         }
     
         .header-center input::placeholder {
@@ -1505,40 +1675,49 @@ input[type="range"] {
         transform: translateX(0);
     }
 
-    .header-right {
-        flex-direction: column;
-        align-items: flex-end;
-        gap: 0.5rem;
-    }
+  
 
     .rewards-grid {
         grid-template-columns: 1fr;
     }
- .header-right {
-     flex-direction: row;
-     justify-content: flex-end;
-     align-items: center;
-     flex-wrap: wrap;
-     gap: 0.5rem;
- }
+        .header-right {
+        display: flex;
+        align-items: center;
+        gap: .8rem;
+        justify-content: flex-end;
+        /* fără space-between aici */
+        min-width: 0;
+        /* permite shrink */
+        flex-wrap: nowrap;
+        }
 
- .header-center input {
-     max-width: 100%;
-     font-size: 1rem;
- }
+        .header-center input {
+            max-width: 100%;
+            font-size: 1rem;
+        }
 
- .user-name {
-     display: none;
- }
+        .user-name {
+            display: none;
+        }
 
+        .user-area,
+        .cart-wrapper,
+        .user-rank {
+            min-width: 0;
+        }
   .user-pill {
       padding: 0;
       border: none;
       background: none;
+      max-width: 180px;
+      overflow: hidden;
       
   }
     .user-pill .user-name {
-        display: none;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+
     }
     
 
@@ -1769,12 +1948,14 @@ input[type="range"] {
 
 .history-row .hr-name {
     font-weight: 600;
+    margin-left: 2vw;
 }
 
 .history-row .hr-meta {
     color: #bbb;
     font-size: .85rem;
     margin-top: 2px;
+    margin-left: 2vw;
 }
 
 .history-order-foot {
