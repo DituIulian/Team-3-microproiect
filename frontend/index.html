@@ -12,7 +12,12 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/noUiSlider/15.7.1/nouislider.min.js"></script>
 
     <link rel="stylesheet" href="style.css" />
+    <script>
+     // PORT din tomcat dupa start proiect
+     window.API_BASE = 'http://' + (location.hostname || 'localhost') + ':63850/api';
+     </script>  
     <script src="script.js" defer></script>
+
 </head>
 
 <body>
@@ -46,16 +51,17 @@
 
 
             <div class="user-points">9400 AP ⚡</div>
-            <div class="user-pill">
-            <div class="user-name" id="user-name">Claudia N.</div>
-            <div class="user-avatar-wrapper">
-                <div class="user-avatar" onclick="toggleUserMenu()">
-                    <img src="assets/images/avatar-placeholder.png" alt="Avatar utilizator" />
-                </div>
+            <div class="user-pill" onclick="toggleUserMenu()">
+                <div class="user-name" id="user-name">Claudia N.</div>
+                <div class="user-avatar-wrapper">
+                    <div class="user-avatar">
+                        <img src="assets/images/avatar-placeholder.png" alt="Avatar utilizator" />
+                    </div>
                 </div>
             
+                <!-- Dropdown-ul -->
                 <ul class="user-menu hidden" id="user-menu">
-                    <li onclick="openProfeile()"> Profilul meu</li> <!-- de implementat -->
+                    <li onclick="openProfeile()">👤 Profilul meu</li>
                     <li onclick="openHistory()">🧍 Istoricul meu</li>
                     <li onclick="openPoints()">⚡ Punctele mele</li>
                     <li onclick="openNotifications()">🔔 Setări notificări</li>
