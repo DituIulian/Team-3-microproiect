@@ -7,8 +7,10 @@ public class RewardResponse {
 
 	private List<Reward> rewards;
 	
-	public RewardResponse() {
-		this.rewards = new ArrayList<>();
+	public RewardResponse() {}
+	
+	public RewardResponse(List<Reward> list) {
+		this.rewards = list != null ? new ArrayList<>(list) : new ArrayList<>();	
 	}
 	
 	public void addReward(Reward reward) {
