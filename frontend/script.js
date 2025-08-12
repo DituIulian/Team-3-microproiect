@@ -57,7 +57,7 @@ const api = {
     apiFetch(`/checkout`, { method: 'POST', body: JSON.stringify({ items }) }),
 
   getHistory: (userId = 'user1') =>
-    apiFetch(`/user/history?userId=${encodeURIComponent(userId)}`), // De implementat
+  apiFetch(`/user/history?userid=${encodeURIComponent(userId)}`),
 };
 
 // toast simplu
@@ -573,17 +573,40 @@ async function modifyCartQuantity(rewardId, delta) {
   }
 }
 
-
-
 async function checkout() {
   try {
     if (!serverCartItems.length) return alert("Coșul este gol!");
-    // trimitem exact payload-ul pe care-l așteaptă backend-ul: lista de CartItem
-    const rawItems = (await api.getCart())?.items || [];
+
+    // 1) luăm payload-ul exact pe care îl are coșul (pe server)
+    const cartData = await api.getCart();
+    const rawItems = cartData?.items || [];
+
+    // 2) încercăm checkout server
     const resp = await api.checkout(rawItems);
     if (!resp?.success) return showToast(resp?.message || 'Checkout eșuat.');
 
-    // Refresh user + cart item
+    // 3) CALCUL & FALLBACK LOCAL HISTORY
+    // dacă backend nu salvează istoric, păstrăm local o copie:
+    const total = rawItems.reduce((s, it) => s + Math.round((it.price || 0) * (it.quantity || 0)), 0);
+    const orderLocal = {
+      id: `local-${Date.now()}`,          // // functioneaza doar din frontend
+      createdAt: new Date().toISOString(),// // functioneaza doar din frontend
+      totalPoints: total,
+      items: rawItems.map(ci => {
+        const r = allRewards.find(x => String(x.id) === String(ci.rewardId));
+        return {
+          rewardId: ci.rewardId,
+          name: ci.name,
+          price: ci.price,
+          quantity: ci.quantity,
+          image: r?.image || 'assets/images/poza.png',
+          category: r?.category || ''
+        };
+      })
+    };
+    saveHistoryLocal(orderLocal);          // // functioneaza doar din frontend
+
+    // 4) Refresh user + cart
     const user = await api.getUserProfile();
     currentUser = user;
     displayUserInfo(user);
@@ -591,10 +614,12 @@ async function checkout() {
 
     showToast('Comandă finalizată! Mulțumim 🛒');
     closeCart();
+
   } catch (e) {
     showToast(e.message);
   }
 }
+
 
 function updateCartUI() {
   const list = document.getElementById("cart-items");
@@ -603,7 +628,7 @@ function updateCartUI() {
 
     if (serverCartItems.length === 0) {
     panel.classList.add("empty-cart");
-    list.innerHTML = `<div><img src="assets/icons/empty-bag.svg" alt="empty" /><p>Coșul de cumpărături este gol</p></div>`;
+    list.innerHTML = `<div><img src="/frontend/assets/icons/empty-bag.png" alt="empty" /><p>Coșul de cumpărături este gol</p></div>`;
     document.getElementById("cart-total").textContent = "0";
 
     const badge = document.getElementById("cart-badge");
@@ -761,13 +786,37 @@ function toggleUserMenu() {
   menu.classList.toggle("hidden");
 }
 
-document.addEventListener("click", function (event) {
-  const pill = document.querySelector(".user-pill");
+//User dropdown 
+
+(() => {
+  const pill = document.getElementById("user-pill");
   const menu = document.getElementById("user-menu");
-  if (pill && !pill.contains(event.target)) {
+  const nameDesktop = document.getElementById("user-name");
+  const nameMobile = document.getElementById("user-name-mobile");
+
+  if (!pill || !menu) return;
+
+  if (nameDesktop && nameMobile) nameMobile.textContent = nameDesktop.textContent;
+
+  const openMenu = () => {
+    menu.classList.remove("hidden");
+    pill.setAttribute("aria-expanded", "true");
+  };
+  const closeMenu = () => {
     menu.classList.add("hidden");
-  }
-});
+    pill.setAttribute("aria-expanded", "false");
+  };
+  const toggleMenu = () => (menu.classList.contains("hidden") ? openMenu() : closeMenu());
+
+  pill.addEventListener("click", (e) => { e.stopPropagation(); toggleMenu(); });
+ 
+  document.addEventListener("click", (e) => {
+    if (!pill.contains(e.target) && !menu.contains(e.target)) closeMenu();
+  });
+
+  document.addEventListener("keydown", (e) => { if (e.key === "Escape") closeMenu(); });
+})();
+
 
 function filterFavorites() {
   const favs = JSON.parse(localStorage.getItem("favorites")) || [];
@@ -887,3 +936,201 @@ document.addEventListener("DOMContentLoaded", async () => {
     showToast(err.message || 'Nu am reușit să mă conectez la server.');
   }
 });
+
+/********************************************
+ * Istoric (fallback frontend-only)
+ * - salvăm comenzi în localStorage atunci când facem checkout
+ * - încercăm mai întâi backend; dacă e gol sau dă eroare, folosim localStorage
+ ********************************************/
+const HISTORY_KEY = 'gtshop_history_user1'; // simplu: un key per user demo
+
+function loadHistoryLocal() {
+  try {
+    const raw = localStorage.getItem(HISTORY_KEY);
+    return raw ? JSON.parse(raw) : [];
+  } catch {
+    return [];
+  }
+}
+
+function saveHistoryLocal(order) {
+  // order: { id, createdAt, totalPoints, items:[{rewardId,name,price,quantity}] }
+  const list = loadHistoryLocal();
+  list.unshift(order); // newest first
+  localStorage.setItem(HISTORY_KEY, JSON.stringify(list));
+}
+
+function clearHistoryLocal() {
+  localStorage.removeItem(HISTORY_KEY);
+}
+
+// încercăm backend; dacă nu răspunde/gol -> local
+async function fetchHistorySmart(userId = 'user1') {
+  try {
+    const resp = await api.getHistory(userId);
+    // suportăm mai multe forme: {items:[]}, {orders:[]}, [] direct
+    const serverItems = Array.isArray(resp)
+      ? resp
+      : (resp?.items || resp?.orders || []);
+
+    if (serverItems && serverItems.length) {
+      // Îmbogățim cu imagine/categorie din allRewards (dacă există)
+      return serverItems.map(ord => ({
+        id: ord.id || ord.orderId || `srv-${Math.random().toString(36).slice(2)}`,
+        createdAt: ord.purchaseDate || ord.createdAt || new Date().toISOString(),
+        totalPoints: Math.round(ord.totalPoints || 0),
+        items: (ord.products || ord.items || []).map(ci => {
+          const r = allRewards.find(x => String(x.id) === String(ci.rewardId));
+          return {
+            rewardId: ci.rewardId,
+            name: ci.name,
+            price: ci.price,
+            quantity: ci.quantity,
+            image: r?.image || 'assets/images/poza.png',
+            category: r?.category || ''
+          };
+        })
+      }));
+    }
+    // gol => fallback local
+    return loadHistoryLocal();
+  } catch {
+    // endpoint lipsă/eroare => fallback local
+    return loadHistoryLocal();
+  }
+}
+
+// UI pentru istoric (modal)
+function openHistory() {
+  renderHistoryModal();
+}
+
+function closeHistory() {
+  const modal = document.getElementById("history-modal");
+  if (!modal) return;
+  modal.classList.add("hidden");
+  modal.style.display = "none";
+}
+
+async function renderHistoryModal() {
+  const modal = document.getElementById("history-modal");
+  const box = modal?.querySelector(".history-content"); // <-- corect: .history-content
+  if (!modal || !box) return;
+
+  // header + loading
+  box.innerHTML = `
+    <button class="close-btn" onclick="closeHistory()">✕</button>
+    <div class="history-header">
+      <div class="history-title">Istoricul meu</div>
+      <div class="user-points-inline">${getAvailablePoint()} AP ⚡</div>
+    </div>
+    <div id="history-body" class="history-loading">Se încarcă…</div>
+  `;
+
+  // încărcăm istoric (server sau local)
+  const list = await fetchHistorySmart(currentUser?.id || 'user1');
+  const body = document.getElementById("history-body");
+
+  if (!list.length) {
+    body.classList.remove("history-loading");
+    body.innerHTML = `<div class="history-empty">Nu există comenzi înregistrate.</div>`;
+  } else {
+    body.classList.remove("history-loading");
+    body.innerHTML = list.map((ord, idx) => {
+      const d = new Date(ord.createdAt);
+      const dateTxt = isNaN(d.getTime()) ? ord.createdAt : d.toLocaleString('ro-RO');
+
+      const rows = (ord.items || []).map(it => {
+        const r = allRewards.find(x => String(x.id) === String(it.rewardId));
+        const img = r?.image || 'assets/images/poza.png';
+        const cat = r?.category || it.category || '';
+        const q = it.quantity ?? 1;
+        const p = Math.round(it.price ?? 0);
+        const line = Math.round(q * p);
+        return `
+          <div class="history-row">
+            <img src="${img}" alt="${it.name}">
+            <div>
+              <div class="hr-name">${it.name}</div>
+              <div class="hr-meta">${cat ? cat + " · " : ""}${q} × ${p} AP</div>
+            </div>
+            <div class="hr-total">${line} AP</div>
+          </div>
+        `;
+      }).join('');
+
+      return `
+        <div class="history-order">
+          <div class="history-order-head">
+            <div>#${idx + 1}</div>
+            <div>${dateTxt}</div>
+          </div>
+          <div class="history-items">${rows}</div>
+          <div class="history-order-foot">
+            <div>Total: ${Math.round(ord.totalPoints)} AP ⚡</div>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  modal.classList.remove("hidden");
+  modal.style.display = "flex";
+
+  // închidere la click în afara cutiei
+  modal.addEventListener("click", (e) => {
+    const c = modal.querySelector(".history-content");
+    if (c && !c.contains(e.target)) closeHistory();
+  }, { once: true });
+
+  // ESC
+  document.addEventListener("keydown", (e) => {
+    if (e.key === "Escape") closeHistory();
+  }, { once: true });
+}
+
+
+
+function renderHistoryRow(p) {
+  const rid   = p.rewardId ?? p.id ?? "";
+  const name  = p.name ?? "Produs";
+  const qty   = p.quantity ?? 1;
+  const price = Math.round(p.price ?? 0);
+  const line  = Math.round(qty * price);
+
+  const r = allRewards.find(x => String(x.id) === String(rid));
+  const img = r?.image || "assets/images/poza.png";
+  const cat = r?.category || (p.category || "");
+
+  return `
+    <div class="history-row">
+      <img src="${img}" alt="${name}">
+      <div>
+        <div class="hr-name">${name}</div>
+        <div class="hr-meta">${cat ? cat + " · " : ""}${qty} × ${price} AP</div>
+      </div>
+      <div class="hr-total">${line} AP</div>
+    </div>
+  `;
+}
+
+//fix pt avatar
+const img = document.getElementById("user-avatar-img");
+const DEFAULT_AVATAR = "assets/images/avatar.jpg";
+const backendAvatar = "avatar.jpg"; // sau gol dacă nu vine nimic din backend
+
+// setează inițial
+if (backendAvatar) {
+  img.src = backendAvatar.startsWith("http") ? backendAvatar : "assets/images/" + backendAvatar;
+} else {
+  img.src = DEFAULT_AVATAR;
+}
+
+// fallback fără loop
+img.onerror = () => {
+  if (img.src.includes(DEFAULT_AVATAR)) {
+    console.warn("Fallback image also missing:", DEFAULT_AVATAR);
+    return; // oprește loop-ul
+  }
+  img.src = DEFAULT_AVATAR;
+};
