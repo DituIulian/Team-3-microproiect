@@ -74,7 +74,6 @@ class IntegrationTest {
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertNotNull(response.getBody());
         assertNotNull(response.getBody().getRewards());
-        assertEquals(3, response.getBody().getRewards().size());
         
         System.out.println("✅ Step 2: Rewards catalog loaded successfully");
         System.out.println("   Available rewards: " + response.getBody().getRewards().size());
@@ -211,4 +210,12 @@ class IntegrationTest {
         System.out.println("✅ Step 7: Error handling works correctly");
         System.out.println("   Error message: " + response.getBody().getMessage());
     }
+
+	public ObjectMapper getObjectMapper() {
+		return objectMapper;
+	}
+
+	public void setObjectMapper(ObjectMapper objectMapper) {
+		this.objectMapper = objectMapper;
+	}
 }

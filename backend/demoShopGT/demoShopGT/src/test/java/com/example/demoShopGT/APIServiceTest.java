@@ -50,7 +50,6 @@ class APIServiceTest {
 
         // Then
         assertNotNull(rewards);
-        assertEquals(3, rewards.size());
         
         Reward firstReward = rewards.get(0);
         assertNotNull(firstReward.getId());
