@@ -58,7 +58,7 @@ class FrontendControllerTest {
         // Given
         List<Reward> mockRewards = Arrays.asList(
                 new Reward("reward1", "Test Reward", "Description", "Full desc", 25.0, "/img.jpg", "Category", true,
-                        10));
+                        10, null, null));
         when(apiService.getRewards()).thenReturn(mockRewards);
 
         // When & Then
