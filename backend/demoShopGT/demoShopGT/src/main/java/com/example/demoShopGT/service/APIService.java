@@ -27,11 +27,11 @@ public class APIService {
         
         // Initialize demo rewards
         rewards.put("reward1", new Reward("reward1", "Coffee Mug", "Premium coffee mug", 
-            "High-quality ceramic coffee mug with company logo", 25.0, "/mug.jpg", "Accessories", true, 50));
+            "High-quality ceramic coffee mug with company logo", 25.0, "/mug.jpg", "Accessories", true, 50, null, null));
         rewards.put("reward2", new Reward("reward2", "T-Shirt", "Cotton t-shirt", 
-            "100% cotton t-shirt with custom design", 35.0, "/tshirt.jpg", "Clothing", true, 30));
+            "100% cotton t-shirt with custom design", 35.0, "/tshirt.jpg", "Clothing", true, 30, null, null));
         rewards.put("reward3", new Reward("reward3", "Gift Card", "$50 Gift Card", 
-            "Digital gift card for online purchases", 50.0, "/giftcard.jpg", "Digital", true, 100));
+            "Digital gift card for online purchases", 50.0, "/giftcard.jpg", "Digital", true, 100, null, null));
         
         // Initialize empty cart and history for demo user
         userCarts.put("user1", new ArrayList<>());

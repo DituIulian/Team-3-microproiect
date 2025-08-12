@@ -28,7 +28,8 @@ class FrontendControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
+    @SuppressWarnings("removal")
+	@MockBean
     private APIService apiService;
 
     @Autowired
@@ -57,7 +58,7 @@ class FrontendControllerTest {
     void testGetRewards() throws Exception {
         // Given
         List<Reward> mockRewards = Arrays.asList(
-            new Reward("reward1", "Test Reward", "Description", "Full desc", 25.0, "/img.jpg", "Category", true, 10)
+            new Reward("reward1", "Test Reward", "Description", "Full desc", 25.0, "/img.jpg", "Category", true, 10, null, null)
         );
         when(apiService.getRewards()).thenReturn(mockRewards);
 
