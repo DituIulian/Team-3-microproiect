@@ -77,7 +77,7 @@ let serverCartTotal = 0;
 //  Rank & progress (doar frontend momentan)
 // !!! BACKEND nu trimite rankul utilizatorului si nr saptamani
 // // functioneaza doar din frontend
-const currentWeek = 12;
+const currentWeek = 9;
 const rankInfo = getUserRankByWeek(currentWeek);
 const progress = getWeekProgress(currentWeek, rankInfo.weekStart, rankInfo.weekEnd);
 
@@ -129,8 +129,12 @@ function displayRewards(rewards) {
     let actionHTML = '';
     if (reward.inStock === false || (reward.stockCount ?? 0) === 0) {
       actionHTML = `<button class="out-of-stock-btn" disabled>Stoc epuizat</button>`;
-    } else if (!hasAccess) {
-      actionHTML = `<button class="out-of-stock-btn" disabled title="Deblochează rank ${rankLabel(rewardRankEnum)}">🔒 Indisponibil</button>`;
+      //small update
+   } else if (!hasAccess) {
+    actionHTML = `
+      <button onclick="openModal('${reward.id}')">Vezi detalii</button>
+      <button class="out-of-stock-btn" disabled title="Necesită rank ${rankLabel(rewardRankEnum)}">🔒 Indisponibil</button>
+    `;
     } else {
       actionHTML = `
         <button onclick="openModal('${reward.id}')">Vezi detalii</button>
@@ -232,16 +236,38 @@ function decreaseModalQty() {
 }
 
 function updateModalButtons(reward) {
-  const plusBtn = document.querySelector(".quantity-row button:nth-child(3)");
+  const plusBtn  = document.querySelector(".quantity-row button:nth-child(3)");
   const minusBtn = document.querySelector(".quantity-row button:nth-child(1)");
+  const addBtn   = document.querySelector(".modal-add-btn");
 
+  // rank check
+  const userRankEnum   = getCurrentUserRankEnum();
+  const rewardRankEnum = reward.rankEnum || toRankEnum(reward.rank || reward.itemRank || reward.requiredRank || 'SILVER');
+  const hasAccess      = isUnlocked(userRankEnum, rewardRankEnum);
+
+  // controle cantitate ca până acum
   const nextTotal = serverCartTotal + (currentModalQty + 1) * reward.price;
-  plusBtn.disabled = nextTotal > (currentUser?.activityPoints ?? 0);
+  plusBtn.disabled  = nextTotal > (currentUser?.activityPoints ?? 0);
   if (plusBtn.disabled) plusBtn.setAttribute("title", "AP insuficient");
   else plusBtn.removeAttribute("title");
 
   minusBtn.disabled = currentModalQty <= 1;
+
+  // butonul de adăugare în coș
+  if (addBtn) {
+    if (!hasAccess) {
+      addBtn.disabled = true;
+      addBtn.textContent = '🔒 Indisponibil';
+      addBtn.title = `Necesită rank ${rankLabel(rewardRankEnum)}`;
+    } else {
+      const canBuy = serverCartTotal + (currentModalQty * reward.price) <= (currentUser?.activityPoints ?? 0);
+      addBtn.disabled = !canBuy;
+      addBtn.textContent = 'Adaugă în coș';
+      if (!canBuy) addBtn.title = 'AP insuficient'; else addBtn.removeAttribute('title');
+    }
+  }
 }
+
 
 function addToCartFromModal(rewardId) {
   handleBuy(rewardId, currentModalQty);
@@ -260,7 +286,13 @@ function openModal(rewardId) {
   const stockCount = Number(r.stockCount || 0);
   const stockPercent = Math.min(100, Math.round((stockCount / (maxStock || 1)) * 100));
 
-  const rewardRank = r.rank || "Unranked"; // // functioneaza doar din frontend
+   // rank & acces
+  const userRankEnum   = getCurrentUserRankEnum();
+  const rewardRankEnum = r.rankEnum || toRankEnum(r.rank || r.itemRank || r.requiredRank || 'SILVER');
+  const hasAccess      = isUnlocked(userRankEnum, rewardRankEnum);
+  const apOK           = getAvailablePoint() >= Math.round(r.price || 0);
+
+  // ... (restul HTML neschimbat până la buton)
 
   modalContent.innerHTML = `
     <span class="close-btn" onclick="closeModal()">&times;</span>
@@ -268,7 +300,7 @@ function openModal(rewardId) {
     <div class="modal-image-wrapper">
       <img id="modal-image" src="${r.image}" alt="${r.name}" />
       <div class="modal-badges">
-        <span class="badge-rank ${(rewardRank || '').toLowerCase()}">${rewardRank}</span>
+        <span class="badge-rank ${rankLabel(rewardRankEnum).toLowerCase()}">${rankLabel(rewardRankEnum)}</span>
         <span class="category-tag">${r.category || ''}</span>
       </div>
     </div>
@@ -276,36 +308,40 @@ function openModal(rewardId) {
     <h3 class="modal-title">${r.name}</h3>
 
     <div class="modal-columns">
+      <!-- stânga neschimbat -->
       <div class="modal-left">
-        <div class="modal-description">
-          <h4>Descriere</h4>
-          <p>${r.description || ''}</p>
-        </div>
-        <div class="modal-specs">
-          <h4>Specificații</h4>
-          <ul>
-            ${(r.fullDescription || '')
-              .split('.')
-              .filter(p => p.trim().length > 3)
-              .map(p => `<li>${p.trim()}</li>`)
-              .join('')}
-          </ul>
-        </div>
-      </div>
+  <div class="modal-description">
+    <h4>Descriere</h4>
+    <p>${r.description || ''}</p>
+  </div>
 
-      <div class="modal-right">
-        <div class="modal-price-box">
-          <span class="price-value">${Math.round(r.price)} AP ⚡</span>
-          <span class="price-label">Activity Points necesari</span>
-        </div>
+            <div class="modal-specs">
+              <h4>Specificații</h4>
+              <ul>
+                ${(r.fullDescription || '')
+                  .split('.')
+                  .filter(p => p.trim().length > 3)
+                  .map(p => `<li>${p.trim()}</li>`)
+                  .join('')}
+              </ul>
+            </div>
+            </div>
 
-        <div class="modal-stock">
-          <label>Stoc</label>
-          <div class="stock-bar">
-            <div class="stock-fill" style="width:${stockPercent}%"></div>
-          </div>
-          <span class="stock-text">${stockCount}${r.maxStock ? '/' + r.maxStock : ''}</span>
-        </div>
+
+                <div class="modal-right">
+                  <div class="modal-price-box">
+                    <span class="price-value">${Math.round(r.price)} AP ⚡</span>
+                    <span class="price-label">Activity Points necesari</span>
+                  </div>
+
+                  <div class="modal-stock">
+            <label>Stoc</label>
+            <div class="stock-bar">
+              <div class="stock-fill" style="width:${stockPercent}%"></div>
+            </div>
+            <span class="stock-text">${stockCount}${r.maxStock ? '/' + r.maxStock : ''}</span>
+            </div>
+
 
         <div class="quantity-row">
           <label>Cantitate</label>
@@ -316,10 +352,16 @@ function openModal(rewardId) {
           </div>
         </div>
 
-        <button class="modal-add-btn" data-rid="${r.id}" onclick="addToCartFromModal('${r.id}')">Adaugă în coș</button>
+        <button
+          class="modal-add-btn"
+          data-rid="${r.id}"
+          ${!hasAccess ? `disabled title="Necesită rank ${rankLabel(rewardRankEnum)}"` : (!apOK ? `disabled title="AP insuficient"` : '')}
+          onclick="addToCartFromModal('${r.id}')"
+        >${!hasAccess ? '🔒 Indisponibil' : 'Adaugă în coș'}</button>
       </div>
     </div>
   `;
+
 
   modal.classList.remove("hidden");
   modal.style.display = "flex";
@@ -1244,9 +1286,6 @@ function typeLabel(enumVal) {
 }
 
 function deriveTypeFallback(r) {
-  // Legendary: prag simplu (≥ 1000 AP)
-  // Rare: stoc foarte mic (1..3)
-  // Popular: restul momentan - de luat din backend implementarea
   const price = Number(r.price || 0);
   const stock = Number(r.stockCount || 0);
   const inStock = r.inStock !== false;
