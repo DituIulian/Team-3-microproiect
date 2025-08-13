@@ -1072,13 +1072,30 @@ async function renderHistoryModal() {
 
   // header + loading
   box.innerHTML = `
-    <button class="close-btn" onclick="closeHistory()">✕</button>
-    <div class="history-header">
-      <div class="history-title">Istoricul meu</div>
+  <button class="close-btn" onclick="closeHistory()">✕</button>
+
+  <div class="history-header">
+    <div class="history-title">Istoricul meu</div>
+    <div class="history-header-right">
       <div class="user-points-inline">${getAvailablePoint()} AP ⚡</div>
+      <button id="clear-history-btn" class="clear-history-btn" type="button">Șterge istoricul</button>
     </div>
-    <div id="history-body" class="history-loading">Se încarcă…</div>
-  `;
+  </div>
+
+  <div id="history-body" class="history-loading">Se încarcă…</div>
+`;
+  
+  // buton "Șterge istoricul" (doar local, fallback)
+const clearBtn = document.getElementById('clear-history-btn');
+if (clearBtn) {
+  clearBtn.addEventListener('click', () => {
+    if (!confirm('Sigur vrei să ștergi istoricul local?')) return;
+    clearHistoryLocal();   // exista deja în cod
+    renderHistoryModal();  // reîncarcă modalul gol
+  });
+}
+
+  
 
   // istoric (server sau local)
   const list = await fetchHistorySmart(currentUser?.id || 'user1');

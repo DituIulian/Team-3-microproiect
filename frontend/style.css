@@ -1982,3 +1982,23 @@ text-decoration: none;
     text-align: center;
     color: #cfcfcf;
 }
+
+.history-header-right {
+    display: flex;
+    align-items: center;
+    gap: .6rem;
+}
+
+.clear-history-btn {
+    background: transparent;
+    border: 1px solid #5A13FF;
+    color: #fff;
+    padding: .35rem .6rem;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-right: 3vw;
+}
+
+.clear-history-btn:hover {
+    background: rgba(90, 19, 255, .12);
+}
