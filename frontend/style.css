@@ -51,7 +51,7 @@ input[type="range"] {
 }
 
 .header-left .gt-logo {
-    height: 48px;
+    height: 4.5vw;
     max-width: 160px;
 }
 
@@ -292,18 +292,6 @@ input[type="range"] {
     position: relative;
 }
 
-.user-menu {
-    position: absolute;
-    top: 60px;
-    right: 0;
-    background: #1a0033;
-    border-radius: 12px;
-    padding: 0.5rem 0;
-    width: 200px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
-    z-index: 10;
-}
-
 .user-menu li {
     padding: 0.75rem 1rem;
     color: white;
@@ -322,6 +310,11 @@ input[type="range"] {
 
 .user-area {
     position: relative;
+}
+
+.coming-soon{
+text-decoration: none;
+color: #fff;
 }
 
 .user-pill {
@@ -376,15 +369,14 @@ input[type="range"] {
 
 .user-menu {
     position: absolute;
-    top: calc(100% + 10px);
-    right: 0;
+    top: 11vh;
+    right: 6vw;
     background: #1a0033;
     border: 1px solid rgba(255, 255, 255, 0.1);
     border-radius: 12px;
     width: 240px;
     padding: .5rem 0;
     box-shadow: 0 12px 24px rgba(0, 0, 0, .35);
-    z-index: 20;
 }
 
 .user-menu li {
@@ -409,8 +401,7 @@ input[type="range"] {
     border-bottom: 1px solid rgba(255, 255, 255, 0.06);
 }
 
-/* ====== MOBILE COMPACT HEADER (doar <= 768px) ====== */
-/* ===== Mobile header compact ===== */
+
 @media (max-width: 768px) {
 
     /* aranjare dreapta stabilă */
@@ -423,13 +414,17 @@ input[type="range"] {
         min-width: 0;
     }
 
+    .header-left .gt-logo {
+        height: 48px !important;
+        max-width: 160px;
+    }
+    
     .header-right>* {
         position: static !important;
         flex: 0 0 auto;
         min-width: 0;
     }
 
-    /* ascunde label-ul si saptamanile/progresul */
     .user-rank {
         display: flex;
         align-items: center;
@@ -448,7 +443,7 @@ input[type="range"] {
         display: none !important;
     }
 
-    /* păstrează DOAR badge-ul (GOLD/…) mic */
+
     .user-rank .badge-rank {
         max-width: none;
         line-height: 1.1;
@@ -456,7 +451,7 @@ input[type="range"] {
         padding: 3px 10px;
     }
 
-    /* AP mai compact */
+
     .user-points {
         display: inline-flex;
         align-items: center;
@@ -465,7 +460,7 @@ input[type="range"] {
         margin-bottom: 4px;
     }
 
-    /* user pill compact */
+ 
     .user-pill {
         display: flex;
         align-items: center;
@@ -475,8 +470,8 @@ input[type="range"] {
         max-width: 140px;
         overflow: hidden;
         position: relative;
-        z-index: 2001;
-        /* stă peste restul */
+        z-index: 3001;
+        cursor: pointer;
     }
 
     .user-pill .user-name,
@@ -497,7 +492,7 @@ input[type="range"] {
         object-fit: cover;
     }
 
-    /* coș mic, fix */
+
     .cart-wrapper {
         width: 40px;
         height: 40px;
@@ -516,7 +511,17 @@ input[type="range"] {
         display: block;
     }
 
-    /* search bar rămâne full width pe rândul lui */
+   .cart-badge {
+        top: 21px !important;
+        right: 18px !important;
+        transform: translate(35%, -35%);
+      
+   }
+
+   .cart-panel {
+       z-index: 1500;
+   }
+
     .header-center {
         width: 100%;
     }
@@ -540,38 +545,31 @@ input[type="range"] {
 
 @media (max-width: 480px) {
 
-    /* Mută AP puțin mai în dreapta față de GOLD */
+
     .user-rank .badge-rank {
         margin-right: .5rem;
-        /* mai mult spațiu între badge și AP */
         font-size: .65rem;
-        /* ușor mai mic badge-ul */
         padding: 3px 7px;
-        /* și padding redus */
         min-width: 1.5rem;
     }
 
-    /* AP rămâne clar separat și centrat vertical */
+
     .user-points {
         font-size: .9rem;
         display: inline-flex;
         align-items: center;
     }
 
-    /* Asigură-te că header-right are spațiu suficient */
     .header-right {
         gap: .6rem;
     }
 }
 
 @media (max-width: 400px) {
-        /* pune distanța pe .user-rank, nu pe .badge-rank */
             .user-rank {
                 margin-inline-end: 12vw !important;
-                /* echivalent cu margin-right în LTR */
             }
         
-            /* și asigură că AP nu e poziționat ciudat */
             .user-points {
                 position: static !important;
                 margin: 0;
@@ -585,14 +583,22 @@ input[type="range"] {
 /* Buton filtre (pentru mobil) */
 .filter-toggle-btn {
     display: none;
-    background-color: #ff005c;
-    color: white;
-    border: none;
-    padding: 0.6rem 1rem;
+    align-items: center;
+    gap: .5rem;
+    background: linear-gradient(90deg, #998FFD 0%, #473DA6 100%);
+    color: #fff;
+    border: 1px solid #5A13FF;
+    padding: .6rem 1rem;
     margin: 1rem;
-    border-radius: 8px;
-    font-weight: bold;
+    border-radius: 12px;
+    font-weight: 700;
     cursor: pointer;
+    box-shadow: 0 6px 16px rgba(90, 19, 255, .25);
+}
+
+
+.filter-toggle-btn:hover {
+    filter: brightness(1.08);
 }
 
 /*Layout principal */
@@ -632,8 +638,21 @@ input[type="range"] {
     font-size: 1.1rem;
 }
 
-.arrow {
-    transition: transform 0.3s ease;
+.filter-header .arrow {
+    display: inline-block;
+    width: .55rem;
+    height: .55rem;
+    border-right: 2px solid #fff;
+    border-bottom: 2px solid #fff;
+    transform: rotate(-135deg);
+    /* sus */
+    transition: transform .2s ease;
+    margin-left: .5rem;
+    opacity: .9;
+}
+
+.filter-section.collapsed .filter-header .arrow {
+    transform: rotate(45deg);
 }
 
 .filter-body {
@@ -669,7 +688,7 @@ input[type="range"] {
     gap: 0.5rem;
 }
 
-/* === NOUISLIDER === */
+
 #price-slider {
     margin: 1rem 0;
 }
@@ -715,9 +734,6 @@ input[type="range"] {
 }
 
 
-
-
-/* Grilă produse */
 .rewards-grid {
     flex: 1;
     display: grid;
@@ -900,7 +916,6 @@ input[type="range"] {
     position: absolute;
     top: 12px;
     right: 12px;
-    font-size: 1.4rem;
     color: #fff;
     background: var(--Neutral-950, #333333);
     border: none;
@@ -936,7 +951,7 @@ input[type="range"] {
     width: 100%;
     max-height: 180px;
     object-fit: contain;
-    background: #fff;
+    background: linear-gradient(360deg, rgba(173, 168, 255, 0.5) -2.75%, rgba(90, 19, 255, 0.5) 100%);
     border-radius: 8px;
     padding: 10px;
 }
@@ -1314,8 +1329,6 @@ input[type="range"] {
     color: #ff005c;
 }
 
-
-
 /* Mesaj cos gol */
 #cart-panel.open.empty-cart {
     display: flex;
@@ -1433,8 +1446,9 @@ input[type="range"] {
 .footer-socials img {
     width: 28px;
     height: 28px;
-    filter: brightness(0) invert(1);
     transition: transform 0.2s;
+    object-fit: cover;
+    border-radius: 4px;
 }
 
 .footer-socials img:hover {
@@ -1455,6 +1469,11 @@ input[type="range"] {
     display: flex;
     gap: 1.5rem;
 }
+.link-footer{
+color: #ddd;
+font-size: 0.9rem;
+text-decoration: none;
+}
 
 .close-btn-mobile {
     display: none;
@@ -1466,7 +1485,6 @@ input[type="range"] {
     border-radius: 50%;
     width: 32px;
     height: 32px;
-    font-size: 1.2rem;
     color: white;
     cursor: pointer;
     transition: background-color 0.2s ease;
@@ -1530,129 +1548,128 @@ input[type="range"] {
 }
 
 @media screen and (max-width: 992px) {
-        .main-header {
-                padding: 1rem;
-            }
-    
-           .header-container {
-            display: grid;
-            grid-template-columns: auto 1fr auto;
-            /* left | spacer | right cluster */
-            grid-template-rows: auto auto;
-            /* row 1 = logo + right, row 2 = search */
-            grid-template-areas:
-                "left . right"
-                "search search search";
-            align-items: center;
-            gap: 12px;
-            width: 100%;
-           }
-    
-        .header-left {
-            grid-area: left;
-            display: flex;
-            justify-content: flex-start;
-            align-items: center;
-        }
-    
-        .gt-logo {
-            height: 40px;
-            max-width: 160px;
-        }
-    
-        .header-right {
-            display: flex;
-            flex-wrap: nowrap;
-            gap: 0.8rem;
-            align-items: center;
-            justify-content: space-between;
-            width: 100%;
-            grid-area: right;
-        }
-    
-        .user-rank {
-            flex: 1 1 100%;
-            max-width: 100%;
-        }
-    
-        .user-points,
-        .user-name,
-        .user-avatar-wrapper,
-        .cart-wrapper {
-            display: flex;
-            align-items: center;
-            gap: 0.4rem;
+    .main-header {
+            padding: 1rem;
         }
 
-        .user-points{
-            margin-bottom: 4px;
-                }
-    
-        .user-name {
-            font-size: 0.9rem;
-            font-weight: bold;
-            white-space: nowrap;
-            grid-area: search;
-            width: 100%;
+        .header-container {
+        display: grid;
+        grid-template-columns: auto 1fr auto;
+        grid-template-rows: auto auto;
+
+        grid-template-areas:
+            "left . right"
+            "search search search";
+        align-items: center;
+        gap: 12px;
+        width: 100%;
         }
-    
-        .header-center {
-            width: 100%;
-            order: 3;
-            grid-area: search;
-        }
-    
-        .header-center input {
-            width: 100%;
-            padding: 0.6rem 1rem;
-            border-radius: 25px;
-            font-size: 1rem;
-            background-color: #320059;
-            color: white;
-            border: none;
-            min-width: 0;
-            max-width: none;
-        }
-    
-        .header-center input::placeholder {
-            color: #aaa;
-        }
-        .user-pill .user-avatar {
-            width: 36px;
-            height: 36px;
-            border-radius: 50%;
-            /* margin-right: 3.3rem; */
-        }
+
+    .header-left {
+        grid-area: left;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
     }
+
+    .gt-logo {
+        height: 40px;
+        max-width: 160px;
+    }
+
+    .header-right {
+        display: flex;
+        flex-wrap: nowrap;
+        gap: 0.8rem;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        grid-area: right;
+    }
+
+    .user-rank {
+        flex: 1 1 100%;
+        max-width: 100%;
+    }
+
+    .user-points,
+    .user-name,
+    .user-avatar-wrapper,
+    .cart-wrapper {
+        display: flex;
+        align-items: center;
+        gap: 0.4rem;
+    }
+
+    .user-points{
+        margin-bottom: 4px;
+            }
+
+    .user-name {
+        font-size: 0.9rem;
+        font-weight: bold;
+        white-space: nowrap;
+        grid-area: search;
+        width: 100%;
+    }
+
+    .header-center {
+        width: 100%;
+        order: 3;
+        grid-area: search;
+    }
+
+    .header-center input {
+        width: 100%;
+        padding: 0.6rem 1rem;
+        border-radius: 25px;
+        font-size: 1rem;
+        background-color: #320059;
+        color: white;
+        border: none;
+        min-width: 0;
+        max-width: none;
+    }
+
+    .header-center input::placeholder {
+        color: #aaa;
+    }
+    .user-pill .user-avatar {
+        width: 36px;
+        height: 36px;
+        border-radius: 50%;
+    }
+}
 
 @media screen and (max-width: 768px) {
 
     .close-btn-mobile {
-            display: block;
-        }
+        display: block;
+    }
 
     .footer-columns {
-            flex-direction: column;
-        }
-    
-        .footer-bottom {
-            flex-direction: column;
-            align-items: center;
-            gap: 0.5rem;
-        }
-    
-        .footer-bottom .footer-rights {
-            flex-direction: column;
-            align-items: center;
-            gap: 0.3rem;
-        }
+        flex-direction: column;
+    }
+
+    .footer-bottom {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.5rem;
+    }
+
+    .footer-bottom .footer-rights {
+        flex-direction: column;
+        align-items: center;
+        gap: 0.3rem;
+    }
 
     .shop-main {
         flex-direction: column;
     }
 
+ 
     .filter-toggle-btn {
-        display: block;
+        display: inline-flex;
     }
 
     .shop-sidebar {
@@ -1680,31 +1697,29 @@ input[type="range"] {
     .rewards-grid {
         grid-template-columns: 1fr;
     }
-        .header-right {
-        display: flex;
-        align-items: center;
-        gap: .8rem;
-        justify-content: flex-end;
-        /* fără space-between aici */
+    .header-right {
+    display: flex;
+    align-items: center;
+    gap: .8rem;
+    justify-content: flex-end;
+    min-width: 0;
+    flex-wrap: nowrap;
+    }
+
+    .header-center input {
+        max-width: 100%;
+        font-size: 1rem;
+    }
+
+    .user-name {
+        display: none;
+    }
+
+    .user-area,
+    .cart-wrapper,
+    .user-rank {
         min-width: 0;
-        /* permite shrink */
-        flex-wrap: nowrap;
-        }
-
-        .header-center input {
-            max-width: 100%;
-            font-size: 1rem;
-        }
-
-        .user-name {
-            display: none;
-        }
-
-        .user-area,
-        .cart-wrapper,
-        .user-rank {
-            min-width: 0;
-        }
+    }
   .user-pill {
       padding: 0;
       border: none;
@@ -1750,8 +1765,6 @@ input[type="range"] {
 
         }
 
-
-
 /* Animatie btn favorite */
 
 @keyframes flip-heart {
@@ -1774,7 +1787,6 @@ input[type="range"] {
 }
 
 
-/* === Overrides stabile (plasat la FINALUL style.css) === */
 .header-container {
     flex-direction: row;
     gap: 2rem;
@@ -1828,21 +1840,22 @@ input[type="range"] {
     padding: 0.4rem 0.8rem;
 }
 
-/* panel & sidebar – variantă consecventă */
+
 .shop-sidebar {
     width: 280px;
+    padding-top: 50px;
 }
 
 .footer-bottom .footer-rights {
     gap: 0.8rem;
 }
 
-/* utilitare: ne asigurăm că există */
+
 .hidden {
     display: none !important;
 }
 
-/* fallback pentru imaginile din card (contează când venim din backend) */
+
 .img-wrapper {
     height: 160px;
     display: flex;
@@ -1858,7 +1871,7 @@ input[type="range"] {
     object-fit: contain;
 }
 
-/* asigurăm overlay-ul modalului (dacă e nevoie) */
+
 .modal {
     display: none;
     position: fixed;
@@ -1873,7 +1886,6 @@ input[type="range"] {
     display: flex;
 }
 
-/* butonul de favorite să fie clickabil și la overlay */
 .favorite-btn {
     position: absolute;
     top: 10px;
@@ -1882,7 +1894,6 @@ input[type="range"] {
     cursor: pointer;
 }
 
-/* === Purchase History Modal === */
 .history-content {
     max-width: 900px;
     width: 92%;

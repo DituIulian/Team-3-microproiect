@@ -25,7 +25,9 @@
     <header class="main-header">
         <div class="header-container">
         <div class="header-left">
-            <img src="assets/images/logo.png" alt="GT Logo" class="gt-logo" />
+            <a href="#" class="gt-logo-link" onclick="resetFilters(); return false;">
+                <img src="/frontend/assets/images/logo.png" alt="Generatia Tech" class="gt-logo">
+            </a>
         </div>
 
         <div class="header-center">
@@ -58,19 +60,19 @@
                 <div class="user-avatar">
                     <img id="user-avatar-img" src="assets/images/avatar.jpg" alt="Avatar utilizator" />
                 </div>
-                <div class="user-name" id="user-name">Claudia N.</div>
+                <div class="user-name" id="user-name">Demo user</div>
                 <i class="chevron fa-solid fa-chevron-down" aria-hidden="true"></i>
             </button>
         
             <!-- Dropdown -->
             <ul class="user-menu hidden" id="user-menu" role="menu" aria-labelledby="user-pill">
-                <li class="user-menu-identity mobile-only">👋 Salut, <strong id="user-name-mobile">Claudia N.</strong></li>
-                <li onclick="openProfeile()">👤 Profilul meu</li>
+                <li class="user-menu-identity mobile-only">👋 Salut, <strong id="user-name-mobile">Demo user</strong></li>
+                <li><a href="#" class="coming-soon">👤 Profilul meu</a></li>
                 <li onclick="openHistory()">🧍 Istoricul meu</li>
-                <li onclick="openPoints()">⚡ Punctele mele</li>
-                <li onclick="openNotifications()">🔔 Setări notificări</li>
+                <li><a href="#" class="coming-soon">⚡ Punctele mele</a></li>
+                <li><a href="#" class="coming-soon">🔔 Setări notificări</a></li>
                 <li onclick="filterFavorites()" id="btn-favorite-view">💜 Favoritele mele</li>
-                <li onclick="logout()">🚪 Log Out</li>
+                <li><a href="#" class="coming-soon">🚪 Log Out</a></li>
             </ul>
         </div>
 
@@ -84,7 +86,7 @@
     </header>
 
     <!-- Buton filtrare (pentru mobil) -->
-    <button class="filter-toggle-btn" id="toggleFilters">🎛️ Filtre</button>
+    <button class="filter-toggle-btn" id="toggleFilters">Filtre</button>
 
     <!-- main -->
     <main class="shop-main">
@@ -96,7 +98,7 @@
             <div class="filter-section">
                 <div class="filter-header" onclick="toggleFilter(this)">
                     <h3>Categorii</h3>
-                    <span class="arrow">▼</span>
+                    <span class="arrow"></span>
                 </div>
                 <div class="filter-body">
                     <label><input type="checkbox" /> Merch GT</label><br />
@@ -112,7 +114,7 @@
         <div class="filter-section">
             <div class="filter-header" onclick="toggleFilter(this)">
                 <h3>Cost în puncte</h3>
-                <span class="arrow">▼</span>
+                <span class="arrow"></span>
             </div>
         
             <div class="filter-body">
@@ -143,7 +145,7 @@
             <div class="filter-section">
                 <div class="filter-header" onclick="toggleFilter(this)">
                     <h3>Rank</h3>
-                    <span class="arrow">▼</span>
+                    <span class="arrow"></span>
                 </div>
                 <div class="filter-body">
                     <label><input type="checkbox" /> Silver</label><br />
@@ -156,7 +158,7 @@
             <div class="filter-section">
                 <div class="filter-header" onclick="toggleFilter(this)">
                     <h3>Disponibilitate</h3>
-                    <span class="arrow">▼</span>
+                    <span class="arrow"></span>
                 </div>
                 <div class="filter-body">
                     <label><input type="checkbox" /> În stoc</label><br />
@@ -165,21 +167,20 @@
                 </div>
             </div>
 
-            <div class="filter-section">
-                <div class="filter-header" onclick="toggleFilter(this)">
-                    <h3>Tipul premiului</h3>
-                    <span class="arrow">▼</span>
+                <div class="filter-section">
+                    <div class="filter-header" onclick="toggleFilter(this)">
+                        <h3>Tipul premiului</h3>
+                        <span class="arrow"></span>
+                    </div>
+                    <div class="filter-body">
+                        <label><input type="checkbox" /> Popular</label><br />
+                        <label><input type="checkbox" /> Rar</label><br />
+                        <label><input type="checkbox" /> Legendary</label>
+                    </div>
                 </div>
-                <div class="filter-body">
-                    <label><input type="checkbox" /> Popular</label><br />
-                    <label><input type="checkbox" /> Rar</label><br />
-                    <label><input type="checkbox" /> Legendary</label>
-                </div>
-            </div>
         </aside>
   
         <!-- Produse -->
-
         <section class="rewards-grid" id="rewards-container"></section>
         
     </main>
@@ -215,47 +216,47 @@
                 de învățare.
             </p>
             <div class="footer-socials">
-                <!-- De introdus link-uri si imagini -->
-                <a href="#"><img src="/frontend/assets/icons/facebook.png" alt="Facebook"></a>
-                <a href="#"><img src="/frontend/assets/icons/instagram.png" alt="Instagram"></a>
-                <a href="#"><img src="/frontend/assets/icons/tiktok.png" alt="TikTok"></a>
+                <a href="https://www.facebook.com/generatiatech.ro/"><img src="/frontend/assets/icons/facebook.png" alt="Facebook"></a>
+                <a href="https://www.instagram.com/generatia_tech/"><img src="/frontend/assets/icons/instagram.png" alt="Instagram"></a>
+                <a href="https://www.tiktok.com/@generatia.tech"><img src="/frontend/assets/icons/tiktok.png" alt="TikTok"></a>
             </div>
         </div>
 
-        <!-- Categorii footer-->
+        <!-- Categorii footer -->
         <div class="footer-column">
             <h4>Categorii</h4>
             <ul>
-                <li>Merch GT</li>
-                <li>Vouchere</li>
-                <li>GT Rank Badges</li>
-                <li>Avatars & Frames</li>
-                <li>Mystery Box</li>
-                <li>Experiențe</li>
-                <li>Accesorii Tech & Gaming</li>
+                <li onclick="applyFilter('category', 'Merch GT')">Merch GT</li>
+                <li onclick="applyFilter('category', 'Vouchere')">Vouchere</li>
+                <li onclick="applyFilter('category', 'GT Rank Badges')">GT Rank Badges</li>
+                <li onclick="applyFilter('category', 'Avatars & Frames')">Avatars & Frames</li>
+                <li onclick="applyFilter('category', 'Mystery Box')">Mystery Box</li>
+                <li onclick="applyFilter('category', 'Experiențe')">Experiențe</li>
+                <li onclick="applyFilter('category', 'Accesorii Tech & Gaming')">Accesorii Tech & Gaming</li>
             </ul>
         </div>
-
-        <!-- Rank footer-->
+        
+        <!-- Rank footer -->
         <div class="footer-column">
             <h4>Rank</h4>
             <ul>
-                <li>Silver (Săpt. 2 – 4)</li>
-                <li>Gold (Săpt. 5 – 7)</li>
-                <li>Diamond (Săpt. 8 – 10)</li>
-                <li>Legend (Săpt. 11 – 13)</li>
+                <li onclick="applyFilter('rank', 'Silver')">Silver (Săpt. 2 – 4)</li>
+                <li onclick="applyFilter('rank', 'Gold')">Gold (Săpt. 5 – 7)</li>
+                <li onclick="applyFilter('rank', 'Diamond')">Diamond (Săpt. 8 – 10)</li>
+                <li onclick="applyFilter('rank', 'Legend')">Legend (Săpt. 11 – 13)</li>
             </ul>
         </div>
 
         <!-- Suport footer-->
         <div class="footer-column">
-            <h4>Support</h4>
+            <h4>Support</h4> 
             <ul>
-                <li>Centru de Ajutor</li>
-                <li>Termeni și Condiții</li>
-                <li>Politica de Confidențialitate</li>
-                <li>Politica de Cookies</li>
-                <li>Contactează-ne</li>
+                <li> <a href="https://generatiatech.ro/blog/"  target="_blank" class="link-footer">Centru de Ajutor </a></li>
+                <li><a href="https://generatiatech.ro/tcu-etl/" target="_blank" class="link-footer"></a>Termeni și Condiții</a></li>
+                <li> <a href="https://digitalnation.ro/privacy-policy/" target="_blank" class="link-footer">Politica de Confidențialitate</a></li>
+                <li><a href="https://digitalnation.ro/cookies-policy/" target="_blank" class="link-footer">Politica de Cookies</a></li>
+                <li><a href="https://mail.google.com/mail/?view=cm&fs=1&to=contact@generatiatech.ro" target="_blank" class="link-footer">Contactează-ne</a></li>
+                <li>Landing page</li>
             </ul>
         </div>
     </div>
