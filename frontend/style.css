@@ -1776,7 +1776,7 @@ text-decoration: none;
 
         }
 
-                @media screen and (max-width: 361) {
+                @media screen and (max-width: 361px) {
     .user-rank .badge-rank {
         display: none;
     }
