@@ -1780,6 +1780,10 @@ text-decoration: none;
     .user-rank .badge-rank {
         display: none;
     }
+        .cart-panel{
+            right: 1rem !important;
+        }
+
     }
                 
 
