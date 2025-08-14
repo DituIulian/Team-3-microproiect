@@ -1695,7 +1695,7 @@ text-decoration: none;
     }
 
   .clear-history-btn {
-    margin-right: 8vw;
+    margin-right: 8vw !important;
   }
 
     .rewards-grid {
