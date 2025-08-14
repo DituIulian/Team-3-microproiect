@@ -1776,6 +1776,13 @@ text-decoration: none;
 
         }
 
+                @media screen and (max-width: 361) {
+    .user-rank .badge-rank {
+        display: none;
+    }
+    }
+                
+
 /* Animatie btn favorite */
 
 @keyframes flip-heart {
