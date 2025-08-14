@@ -1752,6 +1752,9 @@ text-decoration: none;
         padding: 0;
         font-size: 0.75rem;
     }
+    .header-container{
+        gap: 0.5rem !important;
+    }
 
     .rank-info {
         flex-direction: column;
