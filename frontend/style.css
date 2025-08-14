@@ -1781,7 +1781,7 @@ text-decoration: none;
         display: none;
     }
         .cart-panel{
-            right: 1rem !important;
+            right: 0.1vw !important;
         }
 
     }
