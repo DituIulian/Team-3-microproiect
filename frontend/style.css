@@ -1770,6 +1770,10 @@ text-decoration: none;
         padding: 2px 8px;
     }
 
+    .main-footer{
+        text-align: center !important;
+    }
+
         }
 
 /* Animatie btn favorite */
