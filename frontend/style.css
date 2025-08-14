@@ -1694,7 +1694,9 @@ text-decoration: none;
         z-index: 99999;
     }
 
-  
+  .clear-history-btn {
+    margin-right: 8vw;
+  }
 
     .rewards-grid {
         grid-template-columns: 1fr;
