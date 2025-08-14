@@ -1,16 +1,17 @@
+# Proxy: Netlify -> Render
+[[redirects]]
+  from = "/api/*"
+  to = "https://gt-shop-backend.onrender.com/api/:splat"
+  status = 200
+  force = true
+
+# (opțional) migrare vechi /frontend/* -> /:splat, vezi pasul 1
 [[redirects]]
   from = "/frontend/*"
   to = "/:splat"
   status = 200
 
-# (opțional) proxy către backend – completăm la pasul 3
-# [[redirects]]
-#   from = "/api/*"
-#   to = "https://<numele-serviciului>.onrender.com/api/:splat"
-#   status = 200
-#   force = true
-
-# SPA fallback - păstreaz-o la final
+# SPA fallback (ține-o ultima)
 [[redirects]]
   from = "/*"
   to = "/index.html"
