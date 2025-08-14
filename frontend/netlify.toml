@@ -1,4 +1,17 @@
 [[redirects]]
+  from = "/frontend/*"
+  to = "/:splat"
+  status = 200
+
+# (opțional) proxy către backend – completăm la pasul 3
+# [[redirects]]
+#   from = "/api/*"
+#   to = "https://<numele-serviciului>.onrender.com/api/:splat"
+#   status = 200
+#   force = true
+
+# SPA fallback - păstreaz-o la final
+[[redirects]]
   from = "/*"
   to = "/index.html"
   status = 200
