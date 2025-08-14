@@ -520,6 +520,7 @@ color: #fff;
 
    .cart-panel {
        z-index: 1500;
+    width: 17rem;
    }
 
     .header-center {
